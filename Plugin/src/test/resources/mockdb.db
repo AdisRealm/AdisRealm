@@ -1,0 +1,6 @@
+select nickname from nicknames where uuid = '06882ed8-a374-4198-899f-f604c989b377';
+> nickname
+> --------
+> Adi
+> Diit
+@ rows: 2

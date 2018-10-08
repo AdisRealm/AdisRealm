@@ -1,3 +1,10 @@
 name: Adis-Realm
 version: 1.0
-main: adiitya.adisrealm.Adisrealm
+main: adiitya.adisrealm.AdisRealm
+commands:
+  nickname:
+    description: Used to manager nicknames
+    usage: /<command> <add | remove | list>
+    aliases:
+      - nickname
+      - nick
