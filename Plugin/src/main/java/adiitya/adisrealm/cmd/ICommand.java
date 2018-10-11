@@ -14,4 +14,6 @@ public interface ICommand extends CommandExecutor, TabCompleter {
 
 	@Override
 	List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args);
+
+	String getName();
 }

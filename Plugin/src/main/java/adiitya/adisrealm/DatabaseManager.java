@@ -1,9 +1,7 @@
 package adiitya.adisrealm;
 
-import adiitya.adisrealm.db.tables.records.NicknamesRecord;
 import com.google.common.collect.Lists;
 import org.jooq.DSLContext;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -72,10 +70,14 @@ public class DatabaseManager {
 		if (ctx == null)
 			return Optional.empty();
 
+		if (ctx.select(NICKNAMES.UUID).from(NICKNAMES).where(NICKNAMES.NICKNAME.equalIgnoreCase(nickname)).fetch().isEmpty())
+			return Optional.empty();
+
 		String uuid = ctx.select(NICKNAMES.UUID)
 				.from(NICKNAMES)
 				.where(NICKNAMES.NICKNAME.equalIgnoreCase(nickname))
-				.fetchOne().component1();
+				.fetchOne()
+				.component1();
 
 		if (!uuid.equals(""))
 			return Optional.of(UUID.fromString(uuid));

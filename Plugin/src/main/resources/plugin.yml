@@ -1,5 +1,5 @@
 name: Adis-Realm
-version: 1.0
+version: 0.1
 main: adiitya.adisrealm.AdisRealm
 commands:
   nickname:
