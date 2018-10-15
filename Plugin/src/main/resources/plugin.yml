@@ -1,6 +1,7 @@
-name: Adis-Realm
+name: AdisRealm
 version: 0.1
 main: adiitya.adisrealm.AdisRealm
+load: STARTUP
 commands:
   nickname:
     description: Used to manager nicknames

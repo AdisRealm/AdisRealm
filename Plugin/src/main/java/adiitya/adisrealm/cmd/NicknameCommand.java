@@ -1,9 +1,9 @@
 package adiitya.adisrealm.cmd;
 
-import adiitya.adisrealm.DatabaseManager;
+import adiitya.adisrealm.utils.DataManager;
+import adiitya.adisrealm.utils.MinecraftUtils;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,8 +31,9 @@ public class NicknameCommand implements ICommand {
 				removeNickname(sender, args);
 			else
 				sender.sendMessage("§cUSAGE: /" + label + " <add | remove| list> ...");
-		} else
+		} else {
 			sender.sendMessage("§cUSAGE: /" + label + " <add | remove | list> ...");
+		}
 
 		return true;
 	}
@@ -57,24 +58,43 @@ public class NicknameCommand implements ICommand {
 
 		if (args.length > 1) {
 			if (sender instanceof Player) {
-				DatabaseManager.addNickname(((Player) sender).getUniqueId(), args[1]);
-				sender.sendMessage("§9Added nickname §c" + args[1]);
-			} else
+
+				Player p = (Player) sender;
+				String nick = args[1];
+				int status = DataManager.addNickname(p.getUniqueId(), nick);
+
+				if (status == 0) // success
+					sender.sendMessage("§9Successfully nicknamed you §6" + nick);
+				else if (status == 1) // taken
+					sender.sendMessage("§9The nickname §6" + nick + " §9is taken");
+				else if (status == 2) // duplicate (user already has nick)
+					sender.sendMessage("§9You already have the nickname §6" + nick);
+				else if (status == 3) // username
+					sender.sendMessage("§9The nickname §6" + nick + " §9is somebodies username");
+				else if (status == 5) // bad length
+					sender.sendMessage("§9The nickname §6" + nick + " §9is too long or short");
+				else // error
+					sender.sendMessage("§9An unknown error occurred and your nickname hasn't been added");
+			} else {
 				sender.sendMessage("§cYou must be a player to use that!");
-		} else
+			}
+		} else {
 			sender.sendMessage("§cUSAGE: /nickname add <nickname>");
+		}
 	}
 
 	private void removeNickname(CommandSender sender, String[] args) {
 
 		if (args.length > 1) {
 			if (sender instanceof Player) {
-				DatabaseManager.removeNickname(((Player) sender).getUniqueId(), args[1]);
+				DataManager.removeNickname(((Player) sender).getUniqueId(), args[1]);
 				sender.sendMessage("§9Removed nickname §c" + args[1]);
-			} else
+			} else {
 				sender.sendMessage("§cYou must be a player to use that!");
-		} else
+			}
+		} else {
 			sender.sendMessage("§cUSAGE: /nickname remove <nickname>");
+		}
 	}
 
 	private void list(CommandSender sender, String[] args) {
@@ -89,22 +109,30 @@ public class NicknameCommand implements ICommand {
 
 	private void list(CommandSender sender, String name) {
 
-		Optional<UUID> uuid = DatabaseManager.getUserFromNickname(name);
+		Optional<UUID> uuid = DataManager.getUserFromNickname(name);
 		list(sender, uuid.orElse(UUID.randomUUID()));
 	}
 
 	private void list(CommandSender sender, UUID uuid) {
 
-		Player p = Bukkit.getPlayer(uuid);
-		List<String> nicknames = DatabaseManager.getNicknames(uuid).stream()
-				.filter(n -> !n.equalsIgnoreCase(p.getName()))
-				.collect(Collectors.toList());
+		boolean targetExists = MinecraftUtils.userExists(uuid);
 
-		if (nicknames.size() == 0)
-			sender.sendMessage(p.getDisplayName() + " §9has no nicknames");
-		else {
-			sender.sendMessage("§9Nicknames for §r" + p.getDisplayName());
-			nicknames.forEach(nick -> sender.sendMessage("§c> §9" + nick));
+		if (targetExists) {
+
+			String username = Bukkit.getOfflinePlayer(uuid).getName();
+
+			List<String> nicknames = DataManager.getNicknames(uuid).stream()
+					.filter(n -> !n.equalsIgnoreCase(username))
+					.collect(Collectors.toList());
+
+			if (nicknames.isEmpty()) {
+				sender.sendMessage(username + " §9has no nicknames");
+			} else {
+				sender.sendMessage("§9Nicknames for §r" + username);
+				nicknames.forEach(nick -> sender.sendMessage("§c> §9" + nick));
+			}
+		} else {
+			sender.sendMessage("§cPlayer not found");
 		}
 	}
 }

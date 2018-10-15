@@ -1,9 +1,9 @@
 package adiitya.adisrealm;
 
+import adiitya.adisrealm.utils.DataManager;
 import org.jooq.SQLDialect;
 import org.jooq.tools.jdbc.MockConnection;
 import org.jooq.tools.jdbc.MockFileDatabase;
-import org.jooq.tools.jdbc.MockResult;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,20 +23,20 @@ public class DatabaseManagerTest {
 	public static void setup() throws IOException {
 
 		Connection con = new MockConnection(new MockFileDatabase(DatabaseManagerTest.class.getResourceAsStream("/mockdb.db")));
-		new DatabaseManager(con, SQLDialect.SQLITE);
+		new DataManager(con, SQLDialect.SQLITE);
 	}
 
 	@Test
 	public void getNicknames() {
 
-		List<String> nicknames = DatabaseManager.getNicknames(uuid);
+		List<String> nicknames = DataManager.getNicknames(uuid);
 		assertEquals(Arrays.asList("Adi", "Diit"), nicknames);
 	}
 
 	@Test
 	public void removeNickname() {
 
-		DatabaseManager.removeNickname(uuid, "Diit");
+		DataManager.removeNickname(uuid, "Diit");
 
 	}
 }
