@@ -82,10 +82,6 @@
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
         </dependency>
-        <!--dependency>
-            <groupId>sqlite</groupId>
-            <artifactId>SQLite3</artifactId>
-        </dependency-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -94,10 +90,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <!--dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency-->
         <dependency>
             <groupId>adiitya.mojang4j</groupId>
             <artifactId>mojang4j</artifactId>
