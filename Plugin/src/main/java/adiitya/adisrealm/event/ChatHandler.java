@@ -3,10 +3,17 @@ package adiitya.adisrealm.event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class JoinHandler implements Listener {
+public class ChatHandler implements Listener {
+
+	@EventHandler
+	public void onChat(AsyncPlayerChatEvent e) {
+
+		e.setFormat("%s: %s");
+	}
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
