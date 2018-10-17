@@ -1,66 +1,32 @@
 package adiitya.adisrealm.utils;
 
-import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import adiitya.mojang4j.MojangAPI;
+import adiitya.mojang4j.UserProfile;
+import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
+import java.util.logging.Logger;
 
-public final class MinecraftUtils {
+@UtilityClass
+public class MinecraftUtils {
 
-	private static CloseableHttpClient client = HttpClients.createMinimal();
+	private static MojangAPI mojang = MojangAPI.getInstance();
+	private final Logger log = Bukkit.getLogger();
 
-	private static final Function<String, String> USERNAMES_ENDPOINT = uuid -> String.format("https://api.mojang.com/user/profiles/%s/names", uuid);
-
-	public static boolean userExists(UUID uuid) {
-		return !getUsernames(uuid).isEmpty();
+	public boolean playerExists(UUID uuid) {
+		return mojang.getProfile(uuid).isPresent();
 	}
 
-	public static List<String> getUsernames(UUID uuid) {
-
-		List<String> usernames = Lists.newArrayList();
-		HttpGet request = new HttpGet(USERNAMES_ENDPOINT.apply(uuid.toString().replace("-", "")));
-
-		try (CloseableHttpResponse response = client.execute(request)) {
-
-			HttpEntity body = response.getEntity();
-			int code = response.getStatusLine().getStatusCode();
-
-			if (code == 200)
-				usernames.addAll(extractUsernamesFromHistory(body.getContent()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return usernames;
+	public Optional<UUID> getUuid(String name) {
+		return mojang.getUUID(name);
 	}
 
-	private static List<String> extractUsernamesFromHistory(InputStream input) {
+	public Optional<String> getUsername(UUID uuid) {
 
-		List<String> usernames = Lists.newArrayList();
-		JsonArray history = new JsonParser().parse(new InputStreamReader(input)).getAsJsonArray();
+		Optional<UserProfile> profile = mojang.getProfile(uuid);
 
-		history.forEach(e -> usernames.add(extractHistoryEntry(e)));
-
-		return usernames;
+		return profile.map(UserProfile::getUsername);
 	}
-
-	private static String extractHistoryEntry(JsonElement e) {
-		return e.getAsJsonObject()
-				.get("name")
-				.getAsString();
-	}
-
-	private MinecraftUtils() {}
 }

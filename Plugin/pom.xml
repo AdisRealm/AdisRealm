@@ -67,16 +67,8 @@
             <artifactId>bukkit</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito2</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
@@ -90,10 +82,10 @@
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>sqlite</groupId>
             <artifactId>SQLite3</artifactId>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -102,9 +94,14 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+        </dependency-->
+        <dependency>
+            <groupId>adiitya.mojang4j</groupId>
+            <artifactId>mojang4j</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 

@@ -4,6 +4,7 @@ import adiitya.adisrealm.cmd.ICommand;
 import adiitya.adisrealm.cmd.NicknameCommand;
 import adiitya.adisrealm.utils.DataManager;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,10 +12,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class AdisRealm extends JavaPlugin {
 
 	@Getter private static AdisRealm instance;
+
+	private Logger log;
 
 	public AdisRealm() throws IllegalAccessException {
 
@@ -30,20 +35,22 @@ public final class AdisRealm extends JavaPlugin {
 		//disable jooq logo in console to remove spam
 		System.setProperty("org.jooq.no-logo", "true");
 
+		log = Bukkit.getLogger();
+
 		try {
-			System.out.println("Loading config");
+
+			log.info("Loading config");
 			File config = new File(getDataFolder(), "config.yml");
-			System.out.println(config.getAbsolutePath());
 			getConfig().load(config);
 
-			System.out.println("Connecting to the database");
+			log.info("Connecting to the database");
 			new DataManager();
 		} catch (InvalidConfigurationException e) {
-			System.out.println("Invalid config file");
+			log.log(Level.SEVERE, "Invalid config file", e);
 		} catch (FileNotFoundException e) {
-			System.out.println("config.yml not found");
+			log.log(Level.SEVERE, "config.yml not found", e);
 		} catch (IOException e) {
-			System.out.println("Unable to read config file");
+			log.log(Level.SEVERE, "Unable to read config file", e);
 		}
 
 		addCommand(new NicknameCommand());
@@ -52,6 +59,8 @@ public final class AdisRealm extends JavaPlugin {
 	private void addCommand(ICommand cmd) {
 
 		PluginCommand command = getCommand(cmd.getName());
+
+		log.fine("Registering command " + cmd.getName());
 
 		command.setExecutor(cmd);
 		command.setTabCompleter(cmd);

@@ -3,7 +3,6 @@ package adiitya.adisrealm.cmd;
 import adiitya.adisrealm.utils.DataManager;
 import adiitya.adisrealm.utils.MinecraftUtils;
 import com.google.common.collect.Lists;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,6 +44,12 @@ public class NicknameCommand implements ICommand {
 
 		if (args.length < 1)
 			matches.addAll(Arrays.asList("add", "remove", "list"));
+		else if (args.length == 1) {
+
+			String search = args[0];
+
+			if (search.equalsIgnoreCase("remove")) matches.addAll(DataManager.getNicknames(((Player) sender).getUniqueId()));
+		}
 
 		return matches;
 	}
@@ -100,26 +105,31 @@ public class NicknameCommand implements ICommand {
 	private void list(CommandSender sender, String[] args) {
 
 		if (args.length > 1)
-			list(sender, args[1]);
+			listFromUsername(sender, args[1]);
 		else if (sender instanceof Player)
-			list(sender, ((Player) sender).getUniqueId());
+			listFromUsername(sender, sender.getName());
 		else
 			sender.sendMessage("§cYou must be a player to use that!");
 	}
 
-	private void list(CommandSender sender, String name) {
+	private void listFromUsername(CommandSender sender, String name) {
 
-		Optional<UUID> uuid = DataManager.getUserFromNickname(name);
-		list(sender, uuid.orElse(UUID.randomUUID()));
+		Optional<UUID> uuid = getUuid(name);
+
+		if (uuid.isPresent()) {
+			listFromUuid(sender, uuid.get());
+		} else {
+			sender.sendMessage("§cPlayer not found");
+		}
 	}
 
-	private void list(CommandSender sender, UUID uuid) {
+	private void listFromUuid(CommandSender sender, UUID uuid) {
 
-		boolean targetExists = MinecraftUtils.userExists(uuid);
+		boolean targetExists = MinecraftUtils.playerExists(uuid);
 
 		if (targetExists) {
 
-			String username = Bukkit.getOfflinePlayer(uuid).getName();
+			String username = MinecraftUtils.getUsername(uuid).orElse("");
 
 			List<String> nicknames = DataManager.getNicknames(uuid).stream()
 					.filter(n -> !n.equalsIgnoreCase(username))
@@ -134,5 +144,12 @@ public class NicknameCommand implements ICommand {
 		} else {
 			sender.sendMessage("§cPlayer not found");
 		}
+	}
+
+	private Optional<UUID> getUuid(String name) {
+
+		Optional<UUID> nickUUID = DataManager.getUserFromNickname(name);
+
+		return nickUUID.isPresent() ? nickUUID : MinecraftUtils.getUuid(name);
 	}
 }

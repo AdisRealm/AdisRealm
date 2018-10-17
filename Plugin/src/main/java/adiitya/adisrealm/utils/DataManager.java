@@ -1,6 +1,7 @@
 package adiitya.adisrealm.utils;
 
 import com.google.common.collect.Lists;
+import org.bukkit.Bukkit;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -10,6 +11,8 @@ import java.sql.DriverManager;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static adiitya.adisrealm.db.Tables.NICKNAMES;
 import static adiitya.adisrealm.utils.ConnectionUtils.*;
@@ -18,6 +21,8 @@ public class DataManager {
 
 	private static DSLContext ctx;
 	private static Connection con;
+
+	private static Logger log = Bukkit.getLogger();
 
 	public DataManager() {
 
@@ -131,14 +136,15 @@ public class DataManager {
 			if (ctx != null && ctx.selectOne().from(NICKNAMES).fetch().isNotEmpty())
 				return true;
 
-			System.out.println("Reconnecting to database");
+			log.info("Reconnecting to database");
 			con = DriverManager.getConnection(getUrl(), getUsername(), getPassword());
 			ctx = DSL.using(con, SQLDialect.MYSQL);
 
 			return ctx.selectOne().from(NICKNAMES).fetch().isNotEmpty();
 		} catch(Exception e) {
-			System.out.println("Unable to reconnect to database");
-			e.printStackTrace();
+
+			log.log(Level.SEVERE, "Unable to reconnect to database", e);
+
 			return false;
 		}
 	}
