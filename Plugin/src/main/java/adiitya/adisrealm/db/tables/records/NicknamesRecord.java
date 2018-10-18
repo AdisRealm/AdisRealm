@@ -27,31 +27,31 @@ import org.jooq.impl.TableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class NicknamesRecord extends TableRecordImpl<NicknamesRecord> implements Record2<String, String> {
 
-    private static final long serialVersionUID = 5587833;
+    private static final long serialVersionUID = 761737081;
 
     /**
-     * Setter for <code>gs10044.nicknames.uuid</code>.
+     * Setter for <code>nicknames.uuid</code>.
      */
     public void setUuid(String value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>gs10044.nicknames.uuid</code>.
+     * Getter for <code>nicknames.uuid</code>.
      */
     public String getUuid() {
         return (String) get(0);
     }
 
     /**
-     * Setter for <code>gs10044.nicknames.nickname</code>.
+     * Setter for <code>nicknames.nickname</code>.
      */
     public void setNickname(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>gs10044.nicknames.nickname</code>.
+     * Getter for <code>nicknames.nickname</code>.
      */
     public String getNickname() {
         return (String) get(1);

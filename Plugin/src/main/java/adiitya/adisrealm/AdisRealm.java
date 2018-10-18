@@ -44,26 +44,16 @@ public final class AdisRealm extends JavaPlugin {
 
 		log = Bukkit.getLogger();
 
-		try {
-
-			log.info("Loading config");
-			File config = new File(getDataFolder(), "config.yml");
-			getConfig().load(config);
-		} catch (InvalidConfigurationException e) {
-			log.log(Level.SEVERE, "Invalid config file", e);
-		} catch (FileNotFoundException e) {
-			log.log(Level.SEVERE, "config.yml not found", e);
-		} catch (IOException e) {
-			log.log(Level.SEVERE, "Unable to read config file", e);
-		}
-
-
 		getServer().getPluginManager().registerEvents(new ChatHandler(), this);
 
-		log.info("Connecting to the database");
-		new DataManager();
+		try {
+			log.info("Connecting to the database");
+			DataManager.connect(getDatabasePath());
+		} catch (IOException e) {}
 
 		addCommand(new NicknameCommand());
+
+		log.info("Enabled Adi's Realm");
 	}
 
 	private void addCommand(ICommand cmd) {
@@ -76,9 +66,20 @@ public final class AdisRealm extends JavaPlugin {
 		command.setTabCompleter(cmd);
 	}
 
+	private String getDatabasePath() throws IOException {
+
+		File databaseFile = new File(getDataFolder(), "db.sqlite");
+
+		if (!databaseFile.exists())
+			databaseFile.createNewFile();
+
+		return databaseFile.getAbsolutePath();
+	}
+
 	@Override
 	public void onDisable() {
 
+		log.info("Disabling Adi's Realm");
 		DataManager.dispose();
 	}
 }
