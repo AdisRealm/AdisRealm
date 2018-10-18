@@ -8,7 +8,9 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,12 +24,16 @@ public final class AdisRealm extends JavaPlugin {
 
 	private Logger log;
 
-	public AdisRealm() throws IllegalAccessException {
+	public AdisRealm() {
 
-		if (instance != null)
-			throw new IllegalAccessException();
+		super();
+		if (instance == null) AdisRealm.instance = this;
+	}
 
-		AdisRealm.instance = this;
+	protected AdisRealm(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+
+		super(loader, description, dataFolder, file);
+		if (instance == null) AdisRealm.instance = this;
 	}
 
 	@Override
@@ -43,11 +49,6 @@ public final class AdisRealm extends JavaPlugin {
 			log.info("Loading config");
 			File config = new File(getDataFolder(), "config.yml");
 			getConfig().load(config);
-
-			getServer().getPluginManager().registerEvents(new ChatHandler(), this);
-
-			log.info("Connecting to the database");
-			new DataManager();
 		} catch (InvalidConfigurationException e) {
 			log.log(Level.SEVERE, "Invalid config file", e);
 		} catch (FileNotFoundException e) {
@@ -55,6 +56,12 @@ public final class AdisRealm extends JavaPlugin {
 		} catch (IOException e) {
 			log.log(Level.SEVERE, "Unable to read config file", e);
 		}
+
+
+		getServer().getPluginManager().registerEvents(new ChatHandler(), this);
+
+		log.info("Connecting to the database");
+		new DataManager();
 
 		addCommand(new NicknameCommand());
 	}
