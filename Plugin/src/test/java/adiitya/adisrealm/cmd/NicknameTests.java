@@ -1,18 +1,12 @@
 package adiitya.adisrealm.cmd;
 
-import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.utils.DataManager;
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.command.ConsoleCommandSenderMock;
-import be.seeseemelk.mockbukkit.plugin.PluginManagerMock;
 import org.bukkit.ChatColor;
-import org.bukkit.command.PluginCommand;
 import org.junit.jupiter.api.*;
 
 import java.util.UUID;
 
-import static org.joor.Reflect.on;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("/nick")
@@ -20,33 +14,47 @@ public final class NicknameTests {
 
 	private static final UUID ADIITYA = UUID.fromString("06882ed8-a374-4198-899f-f604c989b377");
 
-	private static ServerMock server;
-	private static AdisRealm plugin;
-	private static PluginCommand command;
+	@Nested
+	@DisplayName("/nick add")
+	public class AddTests{
 
-	private static PluginManagerMock manager;
+		@Nested
+		public class GivenConsoleSender extends CommandTest<ConsoleCommandSenderMock> {
 
-	@BeforeAll
-	public static void setup() {
+			@Test
+			public void shouldFailWithoutNickname() {
 
-		server = MockBukkit.mock();
-		plugin = MockBukkit.load(AdisRealm.class);
-		command = plugin.getCommand("nickname");
+				command.execute(getSender(), "nick", new String[] {"add"});
 
-		manager = server.getPluginManager();
+				assertAll(
+						() -> assertEquals("USAGE: /nickname add <nickname>", nextMessage()),
+						() -> assertNull(nextMessage())
+				);
+			}
 
-		DataManager.connect(":memory:");
-		setupDatabase();
-	}
+			@Test
+			public void shouldFailWithSingleNickname() {
 
-	private static void setupDatabase() {
+				command.execute(getSender(), "nick", new String[] {"add", "Aditya"});
 
-		DataManager.addNickname(ADIITYA, "Adi");
-		DataManager.addNickname(ADIITYA, "Diit");
+				assertAll(
+						() -> assertEquals("You must be a player to use that!", nextMessage()),
+						() -> assertNull(nextMessage())
+				);
+			}
 
-		DataManager.addNickname(UUID.randomUUID(), "nickname1");
-		DataManager.addNickname(UUID.randomUUID(), "nickname2");
-		DataManager.addNickname(UUID.randomUUID(), "nickname3");
+			@Override
+			public String nextMessage() {
+				String next = getSender().nextMessage();
+
+				return next != null ? ChatColor.stripColor(next): null;
+			}
+
+			@Override
+			public ConsoleCommandSenderMock getSender() {
+				return (ConsoleCommandSenderMock) server.getConsoleSender();
+			}
+		}
 	}
 
 	@Nested
@@ -54,45 +62,53 @@ public final class NicknameTests {
 	public class ListTests {
 
 		@Nested
-		public class GivenConsoleSender {
-
-			private ConsoleCommandSenderMock sender;
+		public class GivenConsoleSender extends CommandTest<ConsoleCommandSenderMock> {
 
 			@BeforeEach
-			public void before() {
-				sender = (ConsoleCommandSenderMock) server.getConsoleSender();
+			public void setupDatabase() {
+
+				DataManager.addNickname(ADIITYA, "Adi");
+				DataManager.addNickname(ADIITYA, "Diit");
 			}
 
 			@Test
-			public void shouldExecuteWithExistingTarget() {
+			public void shouldPassWithExistingTarget() {
 
-				command.execute(sender, "nick", new String[]{"list", "Adiitya"});
+				command.execute(getSender(), "nick", new String[]{"list", "Adiitya"});
 
 				assertAll(
-						() -> assertEquals("Nicknames for Adiitya", ChatColor.stripColor(sender.nextMessage())),
-						() -> assertEquals("> Adi", ChatColor.stripColor(sender.nextMessage())),
-						() -> assertEquals("> Diit", ChatColor.stripColor(sender.nextMessage())),
-						() -> assertNull(sender.nextMessage())
+						"existing target",
+						() -> assertEquals("Nicknames for Adiitya", nextMessage()),
+						() -> assertEquals("> Adi", nextMessage()),
+						() -> assertEquals("> Diit", nextMessage()),
+						() -> assertNull(nextMessage())
 				);
 			}
 
 			@Test
-			public void shouldFailToExecuteWithoutTarget() {
+			public void shouldFailWithNoTarget() {
 
-				command.execute(sender, "nick", new String[]{"list"});
+				command.execute(getSender(), "nick", new String[]{"list"});
 
 				assertAll(
-						() -> assertEquals("You must be a player to use that!", ChatColor.stripColor(sender.nextMessage())),
-						() -> assertNull(sender.nextMessage())
+						"no target",
+						() -> assertEquals("You must be a player to use that!", nextMessage()),
+						() -> assertNull(nextMessage())
 				);
+			}
+
+			@Override
+			public String nextMessage() {
+
+				String next = getSender().nextMessage();
+
+				return next != null ? ChatColor.stripColor(next): null;
+			}
+
+			@Override
+			public ConsoleCommandSenderMock getSender() {
+				return (ConsoleCommandSenderMock) server.getConsoleSender();
 			}
 		}
-	}
-
-	@AfterAll
-	public static void dispose() {
-
-		on(manager).field("temporaryFiles").call("clear");
-		MockBukkit.unload();
 	}
 }
