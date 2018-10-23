@@ -3,6 +3,7 @@ package adiitya.adisrealm;
 import adiitya.adisrealm.cmd.ICommand;
 import adiitya.adisrealm.cmd.NicknameCommand;
 import adiitya.adisrealm.cmd.msg.MessageCommand;
+import adiitya.adisrealm.cmd.msg.ReplyCommand;
 import adiitya.adisrealm.event.ChatHandler;
 import adiitya.adisrealm.utils.DataManager;
 import lombok.Getter;
@@ -59,6 +60,7 @@ public final class AdisRealm extends JavaPlugin {
 
 		addCommand(new NicknameCommand());
 		addCommand(new MessageCommand());
+		addCommand(new ReplyCommand());
 	}
 
 	private void addCommand(ICommand cmd) {
