@@ -1,6 +1,6 @@
 package adiitya.adisrealm.cmd.msg;
 
-import adiitya.adisrealm.cmd.ICommand;
+import adiitya.adisrealm.cmd.PlayerCommand;
 import adiitya.adisrealm.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -11,13 +11,12 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class MessageCommand implements ICommand {
+public final class MessageCommand extends PlayerCommand {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public void execute(Player sender, Command command, String label, String[] args) {
 
-		if (!(sender instanceof Player)) sender.sendMessage("You must be a player to use that!");
-		else if (args.length < 2) sender.sendMessage("Usage: " + command.getUsage());
+		if (args.length < 2) sender.sendMessage("Usage: " + command.getUsage());
 		else {
 
 			Optional<UUID> target = Utils.getUUID(args[0]);
@@ -31,12 +30,10 @@ public final class MessageCommand implements ICommand {
 
 					String message = Arrays.stream(args, 1, args.length)
 							.collect(Collectors.joining(" "));
-					MessageManager.sendMessage((Player) sender, targetPlayer.getPlayer(), message);
+					MessageManager.sendMessage(sender, targetPlayer.getPlayer(), message);
 				}
 			} else sender.sendMessage("Player not found");
 		}
-
-		return true;
 	}
 
 	@Override

@@ -1,39 +1,35 @@
 package adiitya.adisrealm.cmd.msg;
 
-import adiitya.adisrealm.cmd.ICommand;
-import adiitya.adisrealm.utils.MinecraftUtils;
+import adiitya.adisrealm.cmd.PlayerCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-public final class ReplyCommand implements ICommand {
+public final class ReplyCommand extends PlayerCommand {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public void execute(Player sender, Command command, String label, String[] args) {
 
-		if (!(sender instanceof Player)) sender.sendMessage("You must be a player to use that!");
-		else {
+		Optional<UUID> lastRecipient = MessageManager.getLastRecipient(sender.getUniqueId());
 
-			Player player = (Player) sender;
-			Optional<UUID> lastRecipient = MessageManager.getLastRecipient(player.getUniqueId());
+		if (!lastRecipient.isPresent()) {
+			sender.sendMessage("You don't have anyone to reply to");
+		} else if (!Bukkit.getOfflinePlayer(lastRecipient.get()).isOnline()) {
+			sender.sendMessage("That player is offline");
+		} else if (args.length < 1) {
+			sender.sendMessage("Please enter a message!");
+		} else {
 
-			if (!lastRecipient.isPresent()) sender.sendMessage("You don't have anyone to reply to");
-			else if (!Bukkit.getOfflinePlayer(lastRecipient.get()).isOnline()) sender.sendMessage("That player is offline");
-			else if (args.length < 1) sender.sendMessage("Please enter a message!");
-			else {
-
-				String message = String.join(" ", args);
-				Player target = Bukkit.getPlayer(lastRecipient.get());
-				MessageManager.sendMessage(player, target, message);
-			}
+			String message = String.join(" ", args);
+			Player target = Bukkit.getPlayer(lastRecipient.get());
+			MessageManager.sendMessage(sender, target, message);
 		}
-
-		return true;
 	}
 
 	@Override
