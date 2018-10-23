@@ -2,6 +2,7 @@ package adiitya.adisrealm.cmd;
 
 import adiitya.adisrealm.utils.DataManager;
 import adiitya.adisrealm.utils.MinecraftUtils;
+import adiitya.adisrealm.utils.Utils;
 import com.google.common.collect.Lists;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -114,7 +115,7 @@ public class NicknameCommand implements ICommand {
 
 	private void listFromUsername(CommandSender sender, String name) {
 
-		Optional<UUID> uuid = getUuid(name);
+		Optional<UUID> uuid = Utils.getUUID(name);
 
 		if (uuid.isPresent()) {
 			listFromUuid(sender, uuid.get());
@@ -144,12 +145,5 @@ public class NicknameCommand implements ICommand {
 		} else {
 			sender.sendMessage("§cPlayer not found");
 		}
-	}
-
-	private Optional<UUID> getUuid(String name) {
-
-		Optional<UUID> nickUUID = DataManager.getUserFromNickname(name);
-
-		return nickUUID.isPresent() ? nickUUID : MinecraftUtils.getUuid(name);
 	}
 }

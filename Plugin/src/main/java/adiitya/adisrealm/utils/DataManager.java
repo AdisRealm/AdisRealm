@@ -153,6 +153,8 @@ public class DataManager {
 
 		try {
 			con.close();
-		} catch(Exception ignored) {}
+		} catch(Exception e) {
+			log.info("Exception while closing database connection");
+		}
 	}
 }

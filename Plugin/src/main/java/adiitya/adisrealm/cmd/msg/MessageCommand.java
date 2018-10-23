@@ -1,0 +1,60 @@
+package adiitya.adisrealm.cmd.msg;
+
+import adiitya.adisrealm.cmd.ICommand;
+import adiitya.adisrealm.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public final class MessageCommand implements ICommand {
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+		if (!(sender instanceof Player)) sender.sendMessage("You must be a player to use that!");
+		else if (args.length < 2) sender.sendMessage("Usage: " + command.getUsage());
+		else {
+
+			Optional<UUID> target = Utils.getUUID(args[0]);
+
+			if (target.isPresent()) {
+
+				OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target.get());
+
+				if (!targetPlayer.isOnline()) sender.sendMessage(targetPlayer.getName() + " is offline");
+				else {
+
+					String message = Arrays.stream(args, 1, args.length)
+							.collect(Collectors.joining(" "));
+					MessageManager.sendMessage((Player) sender, targetPlayer.getPlayer(), message);
+				}
+			} else sender.sendMessage("Player not found");
+		}
+
+		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+		List<String> results = new ArrayList<>();
+
+		if (args.length == 1) results.addAll(Bukkit.getOnlinePlayers()
+				.stream()
+				.map(Player::getName)
+				.collect(Collectors.toList()));
+		else if (args.length == 2) results.add("Hello, " + args[0] + "!");
+
+		return results;
+	}
+
+	@Override
+	public String getName() {
+		return "msg";
+	}
+}
