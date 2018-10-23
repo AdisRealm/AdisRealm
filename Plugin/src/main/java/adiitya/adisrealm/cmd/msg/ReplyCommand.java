@@ -18,12 +18,12 @@ public final class ReplyCommand extends PlayerCommand {
 
 		Optional<UUID> lastRecipient = MessageManager.getLastRecipient(sender.getUniqueId());
 
-		if (!lastRecipient.isPresent()) {
-			sender.sendMessage("You don't have anyone to reply to");
+		if (args.length < 1) {
+			sender.sendMessage("§cUsage: " + command.getUsage());
+		} else if (!lastRecipient.isPresent()) {
+			sender.sendMessage("§9You don't have anyone to reply to");
 		} else if (!Bukkit.getOfflinePlayer(lastRecipient.get()).isOnline()) {
-			sender.sendMessage("That player is offline");
-		} else if (args.length < 1) {
-			sender.sendMessage("Please enter a message!");
+			sender.sendMessage("§cThat player is offline");
 		} else {
 
 			String message = String.join(" ", args);

@@ -16,7 +16,7 @@ public final class MessageCommand extends PlayerCommand {
 	@Override
 	public void execute(Player sender, Command command, String label, String[] args) {
 
-		if (args.length < 2) sender.sendMessage("Usage: " + command.getUsage());
+		if (args.length < 2) sender.sendMessage("§cUsage: " + command.getUsage());
 		else {
 
 			Optional<UUID> target = Utils.getUUID(args[0]);
@@ -25,14 +25,14 @@ public final class MessageCommand extends PlayerCommand {
 
 				OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target.get());
 
-				if (!targetPlayer.isOnline()) sender.sendMessage(targetPlayer.getName() + " is offline");
+				if (!targetPlayer.isOnline()) sender.sendMessage(targetPlayer.getName() + "§9 is offline");
 				else {
 
 					String message = Arrays.stream(args, 1, args.length)
 							.collect(Collectors.joining(" "));
 					MessageManager.sendMessage(sender, targetPlayer.getPlayer(), message);
 				}
-			} else sender.sendMessage("Player not found");
+			} else sender.sendMessage("§cPlayer not found");
 		}
 	}
 
