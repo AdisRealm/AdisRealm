@@ -115,7 +115,7 @@ public class NicknameCommand implements ICommand {
 
 	private void listFromUsername(CommandSender sender, String name) {
 
-		Optional<UUID> uuid = getUuid(name);
+		Optional<UUID> uuid = Utils.getUUID(name);
 
 		if (uuid.isPresent()) {
 			listFromUuid(sender, uuid.get());

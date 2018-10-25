@@ -10,7 +10,7 @@ import java.util.UUID;
 @UtilityClass
 public class MinecraftUtils {
 
-	private static MojangAPI mojang = MojangAPI.getInstance();
+	private static final MojangAPI mojang = MojangAPI.getInstance();
 
 	public boolean playerExists(UUID uuid) {
 		return mojang.getProfile(uuid).isPresent();

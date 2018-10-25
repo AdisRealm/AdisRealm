@@ -10,7 +10,7 @@ public class Utils {
 
 	public Optional<UUID> getUUID(String name) {
 
-		Optional<UUID> nickUUID = DataManager.getUserFromNickname(name);
+		Optional<UUID> nickUUID = DataManager.getUUIDFromNickname(name);
 
 		return nickUUID.isPresent() ? nickUUID : MinecraftUtils.getUuid(name);
 	}
