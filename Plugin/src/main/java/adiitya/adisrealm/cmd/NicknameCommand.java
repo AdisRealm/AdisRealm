@@ -148,7 +148,7 @@ public class NicknameCommand implements ICommand {
 
 	private Optional<UUID> getUuid(String name) {
 
-		Optional<UUID> nickUUID = DataManager.getUserFromNickname(name);
+		Optional<UUID> nickUUID = DataManager.getUUIDFromNickname(name);
 
 		return nickUUID.isPresent() ? nickUUID : MinecraftUtils.getUuid(name);
 	}

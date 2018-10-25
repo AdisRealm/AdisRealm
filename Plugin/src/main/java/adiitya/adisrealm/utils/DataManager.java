@@ -3,7 +3,6 @@ package adiitya.adisrealm.utils;
 import adiitya.adisrealm.db.DefaultSchema;
 import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
-import org.bukkit.Bukkit;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
@@ -11,6 +10,7 @@ import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,10 +26,11 @@ public class DataManager {
 
 	private String databasePath;
 
-	private Logger log = Bukkit.getLogger();
+	private Logger log;
 
-	public void connect(String path) {
+	public void connect(String path, Logger log) {
 
+		DataManager.log = log;
 		databasePath = path;
 
 		try {
@@ -123,7 +124,7 @@ public class DataManager {
 				.isNotEmpty();
 	}
 
-	public Optional<UUID> getUserFromNickname(String nickname) {
+	public Optional<UUID> getUUIDFromNickname(String nickname) {
 
 		if (!attemptReconnect())
 			return Optional.empty();
@@ -151,7 +152,7 @@ public class DataManager {
 				return true;
 
 			log.info("Reconnecting to database");
-			connect(databasePath);
+			connect(databasePath, log);
 
 			return ctx.selectOne().from("sqlite_master").fetch().isNotEmpty();
 		} catch(Exception e) {
@@ -159,10 +160,7 @@ public class DataManager {
 		}
 	}
 
-	public void dispose() {
-
-		try {
-			con.close();
-		} catch(Exception ignored) {}
+	public void dispose() throws SQLException {
+		con.close();
 	}
 }

@@ -4,63 +4,59 @@ import adiitya.adisrealm.cmd.ICommand;
 import adiitya.adisrealm.cmd.NicknameCommand;
 import adiitya.adisrealm.event.ChatHandler;
 import adiitya.adisrealm.utils.DataManager;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class AdisRealm extends JavaPlugin {
 
-	@Getter private static AdisRealm instance;
-
 	private Logger log;
 
 	public AdisRealm() {
-
 		super();
-		if (instance == null) AdisRealm.instance = this;
 	}
 
 	protected AdisRealm(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-
 		super(loader, description, dataFolder, file);
-		if (instance == null) AdisRealm.instance = this;
 	}
 
 	@Override
 	public void onEnable() {
+
+		long start = System.nanoTime();
 
 		//disable jooq logo in console to remove spam
 		System.setProperty("org.jooq.no-logo", "true");
 
 		log = Bukkit.getLogger();
 
-		getServer().getPluginManager().registerEvents(new ChatHandler(), this);
+		PluginManager pluginManager = Bukkit.getPluginManager();
+		pluginManager.registerEvents(new ChatHandler(), this);
 
 		try {
 			log.info("Connecting to the database");
-			DataManager.connect(getDatabasePath());
+			DataManager.connect(getDatabasePath(), Bukkit.getLogger());
 		} catch (IOException e) {}
 
 		addCommand(new NicknameCommand());
 
-		log.info("Enabled Adi's Realm");
+		log.info(String.format("Enabled Adi's Realm (Took %fms)", (System.nanoTime() - start) / 1000D));
 	}
 
 	private void addCommand(ICommand cmd) {
 
 		PluginCommand command = getCommand(cmd.getName());
 
-		log.fine("Registering command " + cmd.getName());
+		log.log(Level.FINE, "Registering command {0}", cmd.getName());
 
 		command.setExecutor(cmd);
 		command.setTabCompleter(cmd);
@@ -76,10 +72,18 @@ public final class AdisRealm extends JavaPlugin {
 		return databaseFile.getAbsolutePath();
 	}
 
+	public static AdisRealm getInstance() {
+		return getPlugin(AdisRealm.class);
+	}
+
 	@Override
 	public void onDisable() {
 
-		log.info("Disabling Adi's Realm");
-		DataManager.dispose();
+		try {
+			log.info("Disabling Adi's Realm");
+			DataManager.dispose();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
