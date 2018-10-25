@@ -4,7 +4,7 @@
 package adiitya.adisrealm.db.tables;
 
 
-import adiitya.adisrealm.db.Gs10044;
+import adiitya.adisrealm.db.DefaultSchema;
 import adiitya.adisrealm.db.tables.records.NicknamesRecord;
 
 import javax.annotation.Generated;
@@ -33,10 +33,10 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Nicknames extends TableImpl<NicknamesRecord> {
 
-    private static final long serialVersionUID = 1597089663;
+    private static final long serialVersionUID = 396484805;
 
     /**
-     * The reference instance of <code>gs10044.nicknames</code>
+     * The reference instance of <code>nicknames</code>
      */
     public static final Nicknames NICKNAMES = new Nicknames();
 
@@ -49,31 +49,31 @@ public class Nicknames extends TableImpl<NicknamesRecord> {
     }
 
     /**
-     * The column <code>gs10044.nicknames.uuid</code>.
+     * The column <code>nicknames.uuid</code>.
      */
-    public final TableField<NicknamesRecord, String> UUID = createField("uuid", org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<NicknamesRecord, String> UUID = createField("uuid", org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
 
     /**
-     * The column <code>gs10044.nicknames.nickname</code>.
+     * The column <code>nicknames.nickname</code>.
      */
-    public final TableField<NicknamesRecord, String> NICKNAME = createField("nickname", org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.inline("NULL", org.jooq.impl.SQLDataType.CLOB)), this, "");
+    public final TableField<NicknamesRecord, String> NICKNAME = createField("nickname", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
-     * Create a <code>gs10044.nicknames</code> table reference
+     * Create a <code>nicknames</code> table reference
      */
     public Nicknames() {
         this(DSL.name("nicknames"), null);
     }
 
     /**
-     * Create an aliased <code>gs10044.nicknames</code> table reference
+     * Create an aliased <code>nicknames</code> table reference
      */
     public Nicknames(String alias) {
         this(DSL.name(alias), NICKNAMES);
     }
 
     /**
-     * Create an aliased <code>gs10044.nicknames</code> table reference
+     * Create an aliased <code>nicknames</code> table reference
      */
     public Nicknames(Name alias) {
         this(alias, NICKNAMES);
@@ -96,7 +96,7 @@ public class Nicknames extends TableImpl<NicknamesRecord> {
      */
     @Override
     public Schema getSchema() {
-        return Gs10044.GS10044;
+        return DefaultSchema.DEFAULT_SCHEMA;
     }
 
     /**

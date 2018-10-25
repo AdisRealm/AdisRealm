@@ -10,7 +10,7 @@ import javax.annotation.Generated;
 
 
 /**
- * Convenience access to all tables in gs10044
+ * Convenience access to all tables in 
  */
 @Generated(
     value = {
@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 public class Tables {
 
     /**
-     * The table <code>gs10044.nicknames</code>.
+     * The table <code>nicknames</code>.
      */
     public static final Nicknames NICKNAMES = adiitya.adisrealm.db.tables.Nicknames.NICKNAMES;
 }

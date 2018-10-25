@@ -1,38 +1,53 @@
 package adiitya.adisrealm.utils;
 
+import adiitya.adisrealm.db.DefaultSchema;
 import com.google.common.collect.Lists;
-import org.bukkit.Bukkit;
+import lombok.experimental.UtilityClass;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
+import org.jooq.Table;
 import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static adiitya.adisrealm.db.Tables.NICKNAMES;
-import static adiitya.adisrealm.utils.ConnectionUtils.*;
 
+@UtilityClass
 public class DataManager {
 
-	private static DSLContext ctx;
-	private static Connection con;
+	private DSLContext ctx;
+	private Connection con;
 
-	private static Logger log = Bukkit.getLogger();
+	private String databasePath;
 
-	public DataManager() {
+	private Logger log;
 
-		if (ctx != null)
-			throw new IllegalStateException();
+	public void connect(String path, Logger log) {
 
-		attemptReconnect();
+		DataManager.log = log;
+		databasePath = path;
+
+		try {
+			con = DriverManager.getConnection("jdbc:sqlite:" + path);
+			ctx = DSL.using(con, SQLDialect.SQLITE);
+			log.info("Connected to database");
+		} catch (Exception e) {
+			log.severe("Unable to connect to database");
+		}
+
+		for (Table<?> table : DefaultSchema.DEFAULT_SCHEMA.getTables())
+			ctx.createTableIfNotExists(table)
+				.columns(table.fields())
+				.execute();
 	}
 
-	public static List<String> getNicknames(UUID uuid) {
+	public List<String> getNicknames(UUID uuid) {
 
 		if (!attemptReconnect())
 			return Lists.newArrayList();
@@ -42,7 +57,7 @@ public class DataManager {
 				.fetch(NICKNAMES.NICKNAME);
 	}
 
-	public static int addNickname(UUID uuid, String nickname) {
+	public int addNickname(UUID uuid, String nickname) {
 
 		if (!attemptReconnect())
 			return -1; // error
@@ -64,7 +79,7 @@ public class DataManager {
 		return hasNickname(uuid, nickname) ? 0 : -1; // success : error
 	}
 
-	public static void removeNickname(UUID uuid, String nickname) {
+	public void removeNickname(UUID uuid, String nickname) {
 
 		if (!attemptReconnect())
 			return;
@@ -84,7 +99,7 @@ public class DataManager {
 				.execute();
 	}
 
-	public static boolean isNickTaken(String nickname) {
+	public boolean isNickTaken(String nickname) {
 
 		if (!attemptReconnect())
 			return false;
@@ -96,7 +111,7 @@ public class DataManager {
 				.isNotEmpty();
 	}
 
-	public static boolean hasNickname(UUID uuid, String nickname) {
+	public boolean hasNickname(UUID uuid, String nickname) {
 
 		if (!attemptReconnect())
 			return false;
@@ -109,7 +124,7 @@ public class DataManager {
 				.isNotEmpty();
 	}
 
-	public static Optional<UUID> getUserFromNickname(String nickname) {
+	public Optional<UUID> getUUIDFromNickname(String nickname) {
 
 		if (!attemptReconnect())
 			return Optional.empty();
@@ -129,32 +144,23 @@ public class DataManager {
 		return Optional.empty();
 	}
 
-	private static boolean attemptReconnect() {
+	private boolean attemptReconnect() {
 
 		try {
 
-			if (ctx != null && ctx.selectOne().from(NICKNAMES).fetch().isNotEmpty())
+			if (ctx != null && ctx.selectOne().from("sqlite_master").fetch().isNotEmpty())
 				return true;
 
 			log.info("Reconnecting to database");
-			con = DriverManager.getConnection(getUrl(), getUsername(), getPassword());
-			ctx = DSL.using(con, SQLDialect.MYSQL);
+			connect(databasePath, log);
 
-			return ctx.selectOne().from(NICKNAMES).fetch().isNotEmpty();
+			return ctx.selectOne().from("sqlite_master").fetch().isNotEmpty();
 		} catch(Exception e) {
-
-			log.log(Level.SEVERE, "Unable to reconnect to database", e);
-
 			return false;
 		}
 	}
 
-	public static void dispose() {
-
-		try {
-			con.close();
-		} catch(Exception e) {
-			log.info("Exception while closing database connection");
-		}
+	public void dispose() throws SQLException {
+		con.close();
 	}
 }
