@@ -1,6 +1,6 @@
-package adiitya.adisrealm.cmd.msg;
+package adiitya.adisrealm.cmd;
 
-import adiitya.adisrealm.cmd.PlayerCommand;
+import adiitya.adisrealm.utils.MessageManager;
 import adiitya.adisrealm.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

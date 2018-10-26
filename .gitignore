@@ -1,6 +1,5 @@
-target/
+*/target/
 dependency-reduced-pom.xml
-out/
 *.iml
 .idea/
-gen/
+*/gen/

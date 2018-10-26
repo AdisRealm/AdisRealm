@@ -1,17 +1,12 @@
 package adiitya.adisrealm;
 
-import adiitya.adisrealm.cmd.ICommand;
-import adiitya.adisrealm.cmd.NicknameCommand;
-import adiitya.adisrealm.cmd.msg.MessageCommand;
-import adiitya.adisrealm.cmd.msg.ReplyCommand;
-import adiitya.adisrealm.event.ChatHandler;
+import adiitya.adisrealm.cmd.*;
+import adiitya.adisrealm.event.*;
 import adiitya.adisrealm.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,14 +17,6 @@ import java.util.logging.Logger;
 public final class AdisRealm extends JavaPlugin {
 
 	private Logger log;
-
-	public AdisRealm() {
-		super();
-	}
-
-	protected AdisRealm(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-		super(loader, description, dataFolder, file);
-	}
 
 	@Override
 	public void onEnable() {
@@ -43,17 +30,20 @@ public final class AdisRealm extends JavaPlugin {
 
 		PluginManager pluginManager = Bukkit.getPluginManager();
 		pluginManager.registerEvents(new ChatHandler(), this);
+		pluginManager.registerEvents(new MobHandler(), this);
 
 		try {
 			log.info("Connecting to the database");
 			DataManager.connect(getDatabasePath(), Bukkit.getLogger());
-		} catch (IOException ignored) {}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		addCommand(new NicknameCommand());
 		addCommand(new MessageCommand());
 		addCommand(new ReplyCommand());
 
-		log.info(String.format("Enabled Adi's Realm (Took %fms)", (System.nanoTime() - start) / 1000D));
+		log.info(String.format("Enabled Adi's Realm (Took %fms)", (System.nanoTime() - start) / 1000000D));
 	}
 
 	private void addCommand(ICommand cmd) {

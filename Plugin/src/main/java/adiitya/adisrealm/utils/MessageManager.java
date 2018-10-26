@@ -1,4 +1,4 @@
-package adiitya.adisrealm.cmd.msg;
+package adiitya.adisrealm.utils;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
