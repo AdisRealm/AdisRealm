@@ -13,26 +13,38 @@ import java.util.stream.Collectors;
 
 public final class MessageCommand extends PlayerCommand {
 
-	@Override
-	public void execute(Player sender, Command command, String label, String[] args) {
+	public MessageCommand() {
+		super("msg");
+	}
 
-		if (args.length < 2) sender.sendMessage("§cUsage: " + command.getUsage());
+	@Override
+	public void execute(Player sender, String label, String[] args) {
+
+		if (args.length < 2)
+			sender.sendMessage("§cUsage: " + getUsage());
 		else {
 
 			Optional<UUID> target = Utils.getUUID(args[0]);
 
-			if (target.isPresent()) {
+			if (target.isPresent())
+				processMessage(sender, target.get(), args);
+			else
+				sender.sendMessage("§cPlayer not found");
+		}
+	}
 
-				OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target.get());
+	private void processMessage(Player sender, UUID target, String[] args) {
 
-				if (!targetPlayer.isOnline()) sender.sendMessage(targetPlayer.getName() + "§9 is offline");
-				else {
+		OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
 
-					String message = Arrays.stream(args, 1, args.length)
-							.collect(Collectors.joining(" "));
-					MessageManager.sendMessage(sender, targetPlayer.getPlayer(), message);
-				}
-			} else sender.sendMessage("§cPlayer not found");
+		if (!targetPlayer.isOnline())
+			sender.sendMessage(targetPlayer.getName() + "§9 is offline");
+		else {
+
+			String message = Arrays.stream(args, 1, args.length)
+					.collect(Collectors.joining(" "));
+
+			MessageManager.sendMessage(sender, targetPlayer.getPlayer(), message);
 		}
 	}
 
@@ -41,17 +53,15 @@ public final class MessageCommand extends PlayerCommand {
 
 		List<String> results = new ArrayList<>();
 
-		if (args.length == 1) results.addAll(Bukkit.getOnlinePlayers()
-				.stream()
-				.map(Player::getName)
-				.collect(Collectors.toList()));
-		else if (args.length == 2) results.add("Hello, " + args[0] + "!");
+		if (args.length == 1)
+			results.addAll(
+					Bukkit.getOnlinePlayers()
+							.stream()
+							.map(Player::getName)
+							.collect(Collectors.toList()));
+		else if (args.length == 2)
+			results.add("Hello, " + args[0] + "!");
 
 		return results;
-	}
-
-	@Override
-	public String getName() {
-		return "msg";
 	}
 }

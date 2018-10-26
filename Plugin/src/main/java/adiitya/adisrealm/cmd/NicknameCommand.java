@@ -4,7 +4,6 @@ import adiitya.adisrealm.utils.DataManager;
 import adiitya.adisrealm.utils.MinecraftUtils;
 import adiitya.adisrealm.utils.Utils;
 import com.google.common.collect.Lists;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -14,10 +13,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class NicknameCommand implements ICommand {
+public class NicknameCommand extends Command {
+
+	public NicknameCommand() {
+	    super("nickname");
+	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public void execute(CommandSender sender, String label, String[] args) {
 
 		if (args.length > 0) {
 
@@ -34,30 +37,24 @@ public class NicknameCommand implements ICommand {
 		} else {
 			sender.sendMessage("§cUSAGE: /" + label + " <add | remove | list> ...");
 		}
-
-		return true;
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 
 		List<String> matches = Lists.newArrayList();
 
-		if (args.length < 1)
+		if (args.length == 1)
 			matches.addAll(Arrays.asList("add", "remove", "list"));
-		else if (args.length == 1) {
+		else if (args.length == 2) {
 
 			String search = args[0];
 
-			if (search.equalsIgnoreCase("remove")) matches.addAll(DataManager.getNicknames(((Player) sender).getUniqueId()));
+			if (search.equalsIgnoreCase("remove"))
+				matches.addAll(DataManager.getNicknames(((Player) sender).getUniqueId()));
 		}
 
 		return matches;
-	}
-
-	@Override
-	public String getName() {
-		return "nickname";
 	}
 
 	private void addNickname(CommandSender sender, String[] args) {

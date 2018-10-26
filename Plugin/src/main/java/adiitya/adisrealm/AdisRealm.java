@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class AdisRealm extends JavaPlugin {
@@ -43,14 +42,14 @@ public final class AdisRealm extends JavaPlugin {
 		addCommand(new MessageCommand());
 		addCommand(new ReplyCommand());
 
-		log.info(String.format("Enabled Adi's Realm (Took %fms)", (System.nanoTime() - start) / 1000000D));
+		log.info(() -> String.format("Enabled Adi's Realm (Took %.2fms)", (System.nanoTime() - start) / 1000000D));
 	}
 
-	private void addCommand(ICommand cmd) {
+	private void addCommand(Command cmd) {
 
 		PluginCommand command = getCommand(cmd.getName());
 
-		log.log(Level.FINE, "Registering command {0}", cmd.getName());
+		log.fine(() -> String.format("Registering command %s", cmd.getName()));
 
 		command.setExecutor(cmd);
 		command.setTabCompleter(cmd);

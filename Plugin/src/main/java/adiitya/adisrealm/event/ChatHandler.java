@@ -12,7 +12,7 @@ public class ChatHandler implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 
-		e.setFormat("%s: %s");
+		e.setFormat("§7%s§r: %s");
 	}
 
 	@EventHandler

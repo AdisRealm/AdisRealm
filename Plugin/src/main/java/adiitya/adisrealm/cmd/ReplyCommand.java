@@ -13,13 +13,17 @@ import java.util.UUID;
 
 public final class ReplyCommand extends PlayerCommand {
 
+	public ReplyCommand() {
+		super("r");
+	}
+
 	@Override
-	public void execute(Player sender, Command command, String label, String[] args) {
+	public void execute(Player sender, String label, String[] args) {
 
 		Optional<UUID> lastRecipient = MessageManager.getLastRecipient(sender.getUniqueId());
 
 		if (args.length < 1) {
-			sender.sendMessage("§cUsage: " + command.getUsage());
+			sender.sendMessage("§cUsage: " + getUsage());
 		} else if (!lastRecipient.isPresent()) {
 			sender.sendMessage("§9You don't have anyone to reply to");
 		} else if (!Bukkit.getOfflinePlayer(lastRecipient.get()).isOnline()) {
@@ -35,10 +39,5 @@ public final class ReplyCommand extends PlayerCommand {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		return Collections.emptyList();
-	}
-
-	@Override
-	public String getName() {
-		return "r";
 	}
 }

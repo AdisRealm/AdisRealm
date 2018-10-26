@@ -1,22 +1,23 @@
 package adiitya.adisrealm.cmd;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public abstract class PlayerCommand implements ICommand {
+public abstract class PlayerCommand extends Command {
+
+	public PlayerCommand(String name) {
+		super(name);
+	}
 
 	@Override
-	public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public final void execute(CommandSender sender, String label, String[] args) {
 
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("§cYou must be a player to use that!");
 		} else {
-			execute((Player) sender, command, label, args);
+			execute((Player) sender, label, args);
 		}
-
-		return true;
 	}
 
-	public abstract void execute(Player player, Command command, String label, String[] args);
+	public abstract void execute(Player player, String label, String[] args);
 }
