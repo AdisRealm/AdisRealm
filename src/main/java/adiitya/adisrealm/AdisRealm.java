@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import adiitya.adisrealm.DiscordBot.MissingTokenException;
+
 public final class AdisRealm extends JavaPlugin {
 
 	private Logger log;
@@ -24,6 +26,7 @@ public final class AdisRealm extends JavaPlugin {
 
 		//disable jooq logo in console to remove spam
 		System.setProperty("org.jooq.no-logo", "true");
+		DiscordBot.init();
 
 		log = Bukkit.getLogger();
 
@@ -40,6 +43,12 @@ public final class AdisRealm extends JavaPlugin {
 		addCommand(new NicknameCommand());
 		addCommand(new MessageCommand());
 		addCommand(new ReplyCommand());
+
+		try {
+			DiscordBot.connect();
+		} catch(MissingTokenException e) {
+			log.info("Token not found in config.yml; Not starting discord bot");
+		}
 
 		log.info(() -> String.format("Enabled Adi's Realm (Took %.2fms)", (System.nanoTime() - start) / 1000000D));
 	}
@@ -71,8 +80,11 @@ public final class AdisRealm extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
+		log.info("Disabling Adi's Realm");
+
+		DiscordBot.disconnect();
+
 		try {
-			log.info("Disabling Adi's Realm");
 			DataManager.dispose();
 		} catch (SQLException e) {
 			e.printStackTrace();
