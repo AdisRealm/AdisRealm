@@ -151,7 +151,7 @@ public class DataManager {
 			if (ctx != null && ctx.selectOne().from("sqlite_master").fetch().isNotEmpty())
 				return true;
 
-			log.info("Reconnecting to database");
+			log.info("Connecting to database");
 			connect(databasePath, log);
 
 			return ctx.selectOne().from("sqlite_master").fetch().isNotEmpty();
@@ -161,6 +161,7 @@ public class DataManager {
 	}
 
 	public void dispose() throws SQLException {
+		log.info("Disconnecting from database");
 		con.close();
 	}
 }

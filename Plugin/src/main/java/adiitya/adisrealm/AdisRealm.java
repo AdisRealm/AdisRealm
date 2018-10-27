@@ -32,7 +32,6 @@ public final class AdisRealm extends JavaPlugin {
 		pluginManager.registerEvents(new MobHandler(), this);
 
 		try {
-			log.info("Connecting to the database");
 			DataManager.connect(getDatabasePath(), Bukkit.getLogger());
 		} catch (IOException e) {
 			e.printStackTrace();
