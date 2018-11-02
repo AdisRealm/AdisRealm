@@ -1,6 +1,7 @@
 package adiitya.adisrealm;
 
 import adiitya.adisrealm.cmd.*;
+import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.event.*;
 import adiitya.adisrealm.utils.DataManager;
 import org.bukkit.Bukkit;
@@ -13,7 +14,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import adiitya.adisrealm.DiscordBot.MissingTokenException;
+import adiitya.adisrealm.discord.DiscordBot.MissingTokenException;
+import sx.blah.discord.modules.Configuration;
 
 public final class AdisRealm extends JavaPlugin {
 
@@ -26,13 +28,14 @@ public final class AdisRealm extends JavaPlugin {
 
 		//disable jooq logo in console to remove spam
 		System.setProperty("org.jooq.no-logo", "true");
-		DiscordBot.init();
+
+		Configuration.AUTOMATICALLY_ENABLE_MODULES = false;
+		Configuration.LOAD_EXTERNAL_MODULES = false;
 
 		log = Bukkit.getLogger();
 
 		PluginManager pluginManager = Bukkit.getPluginManager();
-		pluginManager.registerEvents(new ChatHandler(), this);
-		pluginManager.registerEvents(new MobHandler(), this);
+		pluginManager.registerEvents(new BukkitHandler(), this);
 
 		try {
 			DataManager.connect(getDatabasePath(), Bukkit.getLogger());
@@ -47,7 +50,7 @@ public final class AdisRealm extends JavaPlugin {
 		try {
 			DiscordBot.connect();
 		} catch(MissingTokenException e) {
-			log.info("Token not found in config.yml; Not starting discord bot");
+			log.info(e.getMessage());
 		}
 
 		log.info(() -> String.format("Enabled Adi's Realm (Took %.2fms)", (System.nanoTime() - start) / 1000000D));

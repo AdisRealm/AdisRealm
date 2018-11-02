@@ -1,13 +1,20 @@
 package adiitya.adisrealm.event;
 
+import adiitya.adisrealm.AdisRealm;
+import adiitya.adisrealm.discord.DiscordBot;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class ChatHandler implements Listener {
+import static org.bukkit.entity.EntityType.ENDERMAN;
+
+public final class BukkitHandler implements Listener {
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
@@ -20,6 +27,9 @@ public class ChatHandler implements Listener {
 
 		Player p = e.getPlayer();
 		e.setJoinMessage(String.format("§a+§r%s", p.getDisplayName()));
+
+		DiscordBot.onJoin();
+		DiscordBot.updateInfoMessage(false);
 	}
 
 	@EventHandler
@@ -27,5 +37,17 @@ public class ChatHandler implements Listener {
 
 		Player p = e.getPlayer();
 		e.setQuitMessage(String.format("§c-§r%s", p.getDisplayName()));
+
+		DiscordBot.onLeave();
+		DiscordBot.updateInfoMessage(false);
+	}
+
+	@EventHandler
+	public void onEndermanGrief(EntityChangeBlockEvent e) {
+
+		EntityType type = e.getEntityType();
+
+		if (type.equals(ENDERMAN))
+			e.setCancelled(true);
 	}
 }
