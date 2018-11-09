@@ -1,16 +1,15 @@
-package adiitya.adisrealm.cmd;
+package adiitya.adisrealm.commands;
 
+import adiitya.adisrealm.command.Command;
+import adiitya.adisrealm.command.completion.TabCompleter;
+import adiitya.adisrealm.command.completion.TabCompletion;
 import adiitya.adisrealm.utils.DataManager;
 import adiitya.adisrealm.utils.MinecraftUtils;
 import adiitya.adisrealm.utils.Utils;
-import com.google.common.collect.Lists;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NicknameCommand extends Command {
@@ -40,21 +39,33 @@ public class NicknameCommand extends Command {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
+	public List<String> tabComplete(CommandSender sender, String[] args) {
 
-		List<String> matches = Lists.newArrayList();
+		return new TabCompleter()
+				.add(1, new TabCompletion("add", "add"::startsWith))
+				.add(1, new TabCompletion("remove", "remove"::startsWith))
+				.add(1, new TabCompletion("list", "list"::startsWith))
+				.add(2, getRemoveCompletions(sender, args))
+				.get(args);
+	}
 
-		if (args.length == 1)
-			matches.addAll(Arrays.asList("add", "remove", "list"));
-		else if (args.length == 2) {
+	private List<TabCompletion> getRemoveCompletions(CommandSender sender, String[] args) {
 
-			String search = args[0];
+		if (args.length < 2)
+			return Collections.emptyList();
 
-			if (search.equalsIgnoreCase("remove"))
-				matches.addAll(DataManager.getNicknames(((Player) sender).getUniqueId()));
-		}
+		if (!args[0].equalsIgnoreCase("remove"))
+			return Collections.emptyList();
 
-		return matches;
+		if (!(sender instanceof Player))
+			return Collections.emptyList();
+
+		Player player = (Player) sender;
+
+		return DataManager.getNicknames(player.getUniqueId())
+				.stream()
+				.map(nick -> new TabCompletion(nick, args[1]::startsWith))
+				.collect(Collectors.toList());
 	}
 
 	private void addNickname(CommandSender sender, String[] args) {

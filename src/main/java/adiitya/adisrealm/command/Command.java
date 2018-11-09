@@ -1,7 +1,9 @@
-package adiitya.adisrealm.cmd;
+package adiitya.adisrealm.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
+
+import java.util.List;
 
 public abstract class Command implements TabExecutor {
 
@@ -19,6 +21,11 @@ public abstract class Command implements TabExecutor {
 		return true;
 	}
 
+	@Override
+	public final List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
+		return tabComplete(sender, args);
+	}
+
 	protected String getUsage() {
 		return Bukkit.getPluginCommand(getName()).getUsage();
 	}
@@ -27,5 +34,6 @@ public abstract class Command implements TabExecutor {
 		return name;
 	}
 
-	abstract void execute(CommandSender sender, String alias, String[] args);
+	public abstract void execute(CommandSender sender, String alias, String[] args);
+	public abstract List<String> tabComplete(CommandSender sender, String[] args);
 }

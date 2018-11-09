@@ -1,10 +1,12 @@
-package adiitya.adisrealm.cmd;
+package adiitya.adisrealm.commands;
 
+import adiitya.adisrealm.command.PlayerCommand;
+import adiitya.adisrealm.command.completion.TabCompleter;
+import adiitya.adisrealm.command.completion.TabCompletion;
 import adiitya.adisrealm.utils.MessageManager;
 import adiitya.adisrealm.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,6 +35,23 @@ public final class MessageCommand extends PlayerCommand {
 		}
 	}
 
+	@Override
+	public List<String> tabComplete(CommandSender sender, String[] args) {
+		return new TabCompleter()
+				.add(1, getPlayerCompletions(args))
+				.get(args);
+	}
+
+	private List<TabCompletion> getPlayerCompletions(String[] args) {
+
+		if (args.length < 1)
+			return Collections.singletonList(new TabCompletion("", test -> false));
+
+		return Bukkit.getOnlinePlayers().stream()
+				.map((Player p) -> new TabCompletion(p.getName(), test -> p.getName().startsWith(test)))
+				.collect(Collectors.toList());
+	}
+
 	private void processMessage(Player sender, UUID target, String[] args) {
 
 		OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
@@ -46,22 +65,5 @@ public final class MessageCommand extends PlayerCommand {
 
 			MessageManager.sendMessage(sender, targetPlayer.getPlayer(), message);
 		}
-	}
-
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-
-		List<String> results = new ArrayList<>();
-
-		if (args.length == 1)
-			results.addAll(
-					Bukkit.getOnlinePlayers()
-							.stream()
-							.map(Player::getName)
-							.collect(Collectors.toList()));
-		else if (args.length == 2)
-			results.add("Hello, " + args[0] + "!");
-
-		return results;
 	}
 }

@@ -1,7 +1,9 @@
-package adiitya.adisrealm.cmd;
+package adiitya.adisrealm.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public abstract class PlayerCommand extends Command {
 
@@ -20,4 +22,7 @@ public abstract class PlayerCommand extends Command {
 	}
 
 	public abstract void execute(Player player, String label, String[] args);
+
+	@Override
+	public abstract List<String> tabComplete(CommandSender sender, String[] args);
 }

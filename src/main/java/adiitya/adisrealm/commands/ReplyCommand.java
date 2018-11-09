@@ -1,12 +1,13 @@
-package adiitya.adisrealm.cmd;
+package adiitya.adisrealm.commands;
 
+import adiitya.adisrealm.command.PlayerCommand;
+import adiitya.adisrealm.command.completion.TabCompleter;
+import adiitya.adisrealm.command.completion.TabCompletion;
 import adiitya.adisrealm.utils.MessageManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,7 +38,28 @@ public final class ReplyCommand extends PlayerCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		return Collections.emptyList();
+	public List<String> tabComplete(CommandSender sender, String[] args) {
+		return new TabCompleter()
+				.add(1, getReplyTarget(sender))
+				.get(args);
+	}
+
+	private TabCompletion getReplyTarget(CommandSender sender) {
+
+		if (!(sender instanceof Player))
+			return new TabCompletion("Nobody", test -> true);
+
+		Player player = (Player) sender;
+		Optional<UUID> uuid = MessageManager.getLastRecipient(player.getUniqueId());
+
+		if (!uuid.isPresent())
+			return new TabCompletion("Nobody", test -> true);
+
+		Player target = Bukkit.getPlayer(uuid.get());
+
+		if (!target.isOnline())
+			return new TabCompletion("Nobody", test -> true);
+
+		return new TabCompletion(target.getDisplayName(), test -> true);
 	}
 }

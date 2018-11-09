@@ -21,7 +21,11 @@
         </repository>
         <repository>
             <id>jitpack</id>
-            <url>https://jitpack.io</url>
+            <url>https://jitpack.io/</url>
+        </repository>
+        <repository>
+            <id>luck-repo</id>
+            <url>https://repo.lucko.me/</url>
         </repository>
     </repositories>
 

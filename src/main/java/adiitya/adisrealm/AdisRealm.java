@@ -1,6 +1,7 @@
 package adiitya.adisrealm;
 
-import adiitya.adisrealm.cmd.*;
+import adiitya.adisrealm.command.Command;
+import adiitya.adisrealm.commands.*;
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.event.*;
 import adiitya.adisrealm.utils.DataManager;
