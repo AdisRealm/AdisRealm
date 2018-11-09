@@ -2,7 +2,7 @@ package adiitya.adisrealm.commands;
 
 import adiitya.adisrealm.command.PlayerCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
-import adiitya.adisrealm.command.completion.TabCompletion;
+import adiitya.adisrealm.command.completion.TabCompletions;
 import adiitya.adisrealm.utils.MessageManager;
 import adiitya.adisrealm.utils.Utils;
 import org.bukkit.Bukkit;
@@ -38,18 +38,8 @@ public final class MessageCommand extends PlayerCommand {
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args) {
 		return new TabCompleter()
-				.add(1, getPlayerCompletions(args))
+				.add(1, TabCompletions.players())
 				.get(args);
-	}
-
-	private List<TabCompletion> getPlayerCompletions(String[] args) {
-
-		if (args.length < 1)
-			return Collections.singletonList(new TabCompletion("", test -> false));
-
-		return Bukkit.getOnlinePlayers().stream()
-				.map((Player p) -> new TabCompletion(p.getName(), test -> p.getName().startsWith(test)))
-				.collect(Collectors.toList());
 	}
 
 	private void processMessage(Player sender, UUID target, String[] args) {

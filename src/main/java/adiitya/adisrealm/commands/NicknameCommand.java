@@ -3,6 +3,7 @@ package adiitya.adisrealm.commands;
 import adiitya.adisrealm.command.Command;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
+import adiitya.adisrealm.command.completion.TabCompletions;
 import adiitya.adisrealm.utils.DataManager;
 import adiitya.adisrealm.utils.MinecraftUtils;
 import adiitya.adisrealm.utils.Utils;
@@ -42,11 +43,25 @@ public class NicknameCommand extends Command {
 	public List<String> tabComplete(CommandSender sender, String[] args) {
 
 		return new TabCompleter()
-				.add(1, new TabCompletion("add", "add"::startsWith))
-				.add(1, new TabCompletion("remove", "remove"::startsWith))
-				.add(1, new TabCompletion("list", "list"::startsWith))
+				.add(1, new TabCompletion("add", test -> TabCompletions.startsWith(test, "add")))
+				.add(1, new TabCompletion("remove", test -> TabCompletions.startsWith(test, "remove")))
+				.add(1, new TabCompletion("list", test -> TabCompletions.startsWith(test, "list")))
 				.add(2, getRemoveCompletions(sender, args))
+				.add(2, getListCompletions(args))
 				.get(args);
+	}
+
+	private List<TabCompletion> getListCompletions(String[] args) {
+
+		List<TabCompletion> tabCompletions = new ArrayList<>();
+
+		if (args.length < 2)
+			return tabCompletions;
+
+		if (!"list".equalsIgnoreCase(args[0]))
+			return tabCompletions;
+
+		return TabCompletions.players();
 	}
 
 	private List<TabCompletion> getRemoveCompletions(CommandSender sender, String[] args) {

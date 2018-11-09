@@ -3,6 +3,7 @@ package adiitya.adisrealm.commands;
 import adiitya.adisrealm.command.PlayerCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
+import adiitya.adisrealm.command.completion.TabCompletions;
 import adiitya.adisrealm.utils.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -47,18 +48,18 @@ public final class ReplyCommand extends PlayerCommand {
 	private TabCompletion getReplyTarget(CommandSender sender) {
 
 		if (!(sender instanceof Player))
-			return new TabCompletion("Nobody", test -> true);
+			return TabCompletions.always("Nobody");
 
 		Player player = (Player) sender;
 		Optional<UUID> uuid = MessageManager.getLastRecipient(player.getUniqueId());
 
 		if (!uuid.isPresent())
-			return new TabCompletion("Nobody", test -> true);
+			return TabCompletions.always("Nobody");
 
 		Player target = Bukkit.getPlayer(uuid.get());
 
 		if (!target.isOnline())
-			return new TabCompletion("Nobody", test -> true);
+			return TabCompletions.always("Nobody");
 
 		return new TabCompletion(target.getDisplayName(), test -> true);
 	}
