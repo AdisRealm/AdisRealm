@@ -2,9 +2,9 @@ package adiitya.adisrealm.discord;
 
 import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.event.DiscordHandler;
-import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
@@ -21,9 +21,11 @@ public final class DiscordBot {
 	private static IGuild guild;
 	private static IMessage infoMessage;
 
-	private static int onlinePlayers = 0;
+	private static Server server;
 
-	public static void connect() throws MissingTokenException {
+	private static int onlinePlayers = Bukkit.getOnlinePlayers().size();
+
+	public static void connect(Server server) throws MissingTokenException {
 
 		if (client != null && client.isReady())
 			return;
@@ -33,6 +35,8 @@ public final class DiscordBot {
 		if (!config.contains("token"))
 			throw new MissingTokenException("token not found in config.yml");
 
+		DiscordBot.server = server;
+
 		String token = config.getString("token");
 
 		client = new ClientBuilder()
@@ -41,10 +45,6 @@ public final class DiscordBot {
 				.login();
 
 		updateInfoMessage(false);
-	}
-
-	public void sendMessage(IChannel channel, DiscordMessage message) {
-		channel.sendMessage(message.getEmbed());
 	}
 
 	public void sendMessage(IChannel channel, String message) {
@@ -93,27 +93,28 @@ public final class DiscordBot {
 	private static EmbedObject buildInfoMessage(boolean dispose) {
 
 		EmbedBuilder b = new EmbedBuilder();
+		FileConfiguration config = AdisRealm.getInstance().getConfig();
 
 		b.withAuthorIcon(guild.getIconURL());
 		b.withAuthorName(guild.getName());
 
 		b.appendField("Bot status", dispose ? ":x:" : ":white_check_mark:", false);
 
-		b.appendField("IP", "mc.adisrealm.tk", true);
-		b.appendField("Seed", "" + Bukkit.getWorlds().get(0).getSeed(), true);
+		b.appendField("IP", config.getString("ip", "Enter an ip in config.yml"), true);
+		b.appendField("Seed", "" + server.getWorlds().get(0).getSeed(), true);
 
-		b.appendField("Players online", getPlayers(), false);
+		b.appendField("Players online", getPlayers(dispose), false);
 
 		b.withFooterText("Made by " + client.fetchUser(154403301159469056L).getName());
 
 		return b.build();
 	}
 
-	private String getPlayers() {
+	String getPlayers(boolean dispose) {
 
-		int max = Bukkit.getMaxPlayers();
+		int max = server.getMaxPlayers();
 
-		return String.format("%s/%s", onlinePlayers, max);
+		return String.format("%s/%s", dispose ? 0 : onlinePlayers, max);
 	}
 
 	public void onJoin() {

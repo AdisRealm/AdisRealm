@@ -48,7 +48,7 @@ public final class AdisRealm extends JavaPlugin {
 		addCommand(new ReplyCommand());
 
 		try {
-			DiscordBot.connect();
+			DiscordBot.connect(getServer());
 		} catch(MissingTokenException e) {
 			log.info(e.getMessage());
 		}
@@ -83,7 +83,7 @@ public final class AdisRealm extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-		log.info("Disabling Adi's Realm");
+		long start = System.nanoTime();
 
 		DiscordBot.disconnect();
 
@@ -92,5 +92,7 @@ public final class AdisRealm extends JavaPlugin {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		log.info(() -> String.format("Disabled Adi's Realm (took %.2fms)", (System.nanoTime() - start) / 1000000D));
 	}
 }
