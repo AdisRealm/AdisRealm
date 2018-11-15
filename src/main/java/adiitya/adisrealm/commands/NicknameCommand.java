@@ -1,6 +1,6 @@
 package adiitya.adisrealm.commands;
 
-import adiitya.adisrealm.command.Command;
+import adiitya.adisrealm.command.MainCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
 import adiitya.adisrealm.command.completion.TabCompletions;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NicknameCommand extends Command {
+public class NicknameCommand extends MainCommand {
 
 	public NicknameCommand() {
 	    super("nickname");

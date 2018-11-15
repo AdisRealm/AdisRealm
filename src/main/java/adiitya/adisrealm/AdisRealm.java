@@ -1,6 +1,6 @@
 package adiitya.adisrealm;
 
-import adiitya.adisrealm.command.Command;
+import adiitya.adisrealm.command.MainCommand;
 import adiitya.adisrealm.commands.*;
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.event.*;
@@ -57,7 +57,7 @@ public final class AdisRealm extends JavaPlugin {
 		log.info(() -> String.format("Enabled Adi's Realm (Took %.2fms)", (System.nanoTime() - start) / 1000000D));
 	}
 
-	private void addCommand(Command cmd) {
+	private void addCommand(MainCommand cmd) {
 
 		PluginCommand command = getCommand(cmd.getName());
 

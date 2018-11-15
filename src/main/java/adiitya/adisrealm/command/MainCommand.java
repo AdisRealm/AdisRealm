@@ -6,11 +6,11 @@ import org.bukkit.command.*;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Command implements TabExecutor {
+public abstract class MainCommand implements TabExecutor {
 
 	protected final String name;
 
-	public Command(String name) {
+	public MainCommand(String name) {
 		this.name = name;
 	}
 

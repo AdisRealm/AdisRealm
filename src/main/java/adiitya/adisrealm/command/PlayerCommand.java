@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public abstract class PlayerCommand extends Command {
+public abstract class PlayerCommand extends MainCommand {
 
 	public PlayerCommand(String name) {
 		super(name);
