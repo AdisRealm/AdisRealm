@@ -2,7 +2,6 @@ package adiitya.adisrealm.event;
 
 import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.discord.DiscordBot;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;

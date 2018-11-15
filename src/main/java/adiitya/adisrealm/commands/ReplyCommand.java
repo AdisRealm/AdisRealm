@@ -20,11 +20,11 @@ public final class ReplyCommand extends PlayerCommand {
 	}
 
 	@Override
-	public void execute(Player sender, String label, String[] args) {
+	public void execute(Player sender, String label, List<String> args) {
 
 		Optional<UUID> lastRecipient = MessageManager.getLastRecipient(sender.getUniqueId());
 
-		if (args.length < 1) {
+		if (args.isEmpty()) {
 			sender.sendMessage("§cUsage: " + getUsage());
 		} else if (!lastRecipient.isPresent()) {
 			sender.sendMessage("§9You don't have anyone to reply to");
@@ -39,7 +39,7 @@ public final class ReplyCommand extends PlayerCommand {
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
+	public List<String> tabComplete(CommandSender sender, List<String> args) {
 		return new TabCompleter()
 				.add(1, getReplyTarget(sender))
 				.get(args);

@@ -20,11 +20,11 @@ public class NicknameCommand extends Command {
 	}
 
 	@Override
-	public void execute(CommandSender sender, String label, String[] args) {
+	public void execute(CommandSender sender, String label, List<String> args) {
 
-		if (args.length > 0) {
+		if (!args.isEmpty()) {
 
-			String arg = args[0];
+			String arg = args.get(0);
 
 			if (arg.equalsIgnoreCase("list"))
 				list(sender, args);
@@ -40,7 +40,7 @@ public class NicknameCommand extends Command {
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
+	public List<String> tabComplete(CommandSender sender, List<String> args) {
 
 		return new TabCompleter()
 				.add(1, new TabCompletion("add", test -> TabCompletions.startsWith(test, "add")))
@@ -51,25 +51,25 @@ public class NicknameCommand extends Command {
 				.get(args);
 	}
 
-	private List<TabCompletion> getListCompletions(String[] args) {
+	private List<TabCompletion> getListCompletions(List<String> args) {
 
 		List<TabCompletion> tabCompletions = new ArrayList<>();
 
-		if (args.length < 2)
+		if (args.size() < 2)
 			return tabCompletions;
 
-		if (!"list".equalsIgnoreCase(args[0]))
+		if (!"list".equalsIgnoreCase(args.get(0)))
 			return tabCompletions;
 
 		return TabCompletions.players();
 	}
 
-	private List<TabCompletion> getRemoveCompletions(CommandSender sender, String[] args) {
+	private List<TabCompletion> getRemoveCompletions(CommandSender sender, List<String> args) {
 
-		if (args.length < 2)
+		if (args.size() < 2)
 			return Collections.emptyList();
 
-		if (!args[0].equalsIgnoreCase("remove"))
+		if (!args.get(0).equalsIgnoreCase("remove"))
 			return Collections.emptyList();
 
 		if (!(sender instanceof Player))
@@ -79,17 +79,17 @@ public class NicknameCommand extends Command {
 
 		return DataManager.getNicknames(player.getUniqueId())
 				.stream()
-				.map(nick -> new TabCompletion(nick, args[1]::startsWith))
+				.map(nick -> new TabCompletion(nick, args.get(0)::startsWith))
 				.collect(Collectors.toList());
 	}
 
-	private void addNickname(CommandSender sender, String[] args) {
+	private void addNickname(CommandSender sender, List<String> args) {
 
-		if (args.length > 1) {
+		if (args.size() > 1) {
 			if (sender instanceof Player) {
 
 				Player p = (Player) sender;
-				String nick = args[1];
+				String nick = args.get(1);
 				int status = DataManager.addNickname(p.getUniqueId(), nick);
 
 				if (status == 0) // success
@@ -112,12 +112,12 @@ public class NicknameCommand extends Command {
 		}
 	}
 
-	private void removeNickname(CommandSender sender, String[] args) {
+	private void removeNickname(CommandSender sender, List<String> args) {
 
-		if (args.length > 1) {
+		if (args.size() > 1) {
 			if (sender instanceof Player) {
-				DataManager.removeNickname(((Player) sender).getUniqueId(), args[1]);
-				sender.sendMessage("§9Removed nickname §c" + args[1]);
+				DataManager.removeNickname(((Player) sender).getUniqueId(), args.get(1));
+				sender.sendMessage("§9Removed nickname §c" + args.get(1));
 			} else {
 				sender.sendMessage("§cYou must be a player to use that!");
 			}
@@ -126,10 +126,10 @@ public class NicknameCommand extends Command {
 		}
 	}
 
-	private void list(CommandSender sender, String[] args) {
+	private void list(CommandSender sender, List<String> args) {
 
-		if (args.length > 1)
-			listFromUsername(sender, args[1]);
+		if (args.size() > 1)
+			listFromUsername(sender, args.get(1));
 		else if (sender instanceof Player)
 			listFromUsername(sender, sender.getName());
 		else

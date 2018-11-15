@@ -12,7 +12,7 @@ public abstract class PlayerCommand extends Command {
 	}
 
 	@Override
-	public final void execute(CommandSender sender, String label, String[] args) {
+	public final void execute(CommandSender sender, String label, List<String> args) {
 
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("§cYou must be a player to use that!");
@@ -21,8 +21,8 @@ public abstract class PlayerCommand extends Command {
 		}
 	}
 
-	public abstract void execute(Player player, String label, String[] args);
+	public abstract void execute(Player player, String label,List<String> args);
 
 	@Override
-	public abstract List<String> tabComplete(CommandSender sender, String[] args);
+	public abstract List<String> tabComplete(CommandSender sender, List<String> args);
 }

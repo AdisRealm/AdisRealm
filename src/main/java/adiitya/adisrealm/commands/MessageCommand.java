@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class MessageCommand extends PlayerCommand {
 
@@ -20,13 +19,13 @@ public final class MessageCommand extends PlayerCommand {
 	}
 
 	@Override
-	public void execute(Player sender, String label, String[] args) {
+	public void execute(Player sender, String label, List<String> args) {
 
-		if (args.length < 2)
+		if (args.size() < 2)
 			sender.sendMessage("§cUsage: " + getUsage());
 		else {
 
-			Optional<UUID> target = Utils.getUUID(args[0]);
+			Optional<UUID> target = Utils.getUUID(args.get(0));
 
 			if (target.isPresent())
 				processMessage(sender, target.get(), args);
@@ -36,22 +35,24 @@ public final class MessageCommand extends PlayerCommand {
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args) {
+	public List<String> tabComplete(CommandSender sender, List<String> args) {
 		return new TabCompleter()
 				.add(1, TabCompletions.players())
 				.get(args);
 	}
 
-	private void processMessage(Player sender, UUID target, String[] args) {
+	private void processMessage(Player sender, UUID target, List<String> args) {
 
+		List<String> list = new ArrayList<>(args);
 		OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
+
+		list.remove(0);
 
 		if (!targetPlayer.isOnline())
 			sender.sendMessage(targetPlayer.getName() + "§9 is offline");
 		else {
 
-			String message = Arrays.stream(args, 1, args.length)
-					.collect(Collectors.joining(" "));
+			String message = String.join(" ", list);
 
 			MessageManager.sendMessage(sender, targetPlayer.getPlayer(), message);
 		}

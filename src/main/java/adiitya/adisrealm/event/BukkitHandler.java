@@ -1,8 +1,6 @@
 package adiitya.adisrealm.event;
 
-import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.discord.DiscordBot;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

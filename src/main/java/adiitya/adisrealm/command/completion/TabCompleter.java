@@ -1,13 +1,10 @@
 package adiitya.adisrealm.command.completion;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class TabCompleter {
 
-	private Map<Integer, List<TabCompletion>> completionMap;
+	private final Map<Integer, List<TabCompletion>> completionMap;
 
 	public TabCompleter() {
 		completionMap = new HashMap<>();
@@ -31,11 +28,15 @@ public final class TabCompleter {
 	}
 
 	public List<String> get(String[] args) {
+		return get(Arrays.asList(args));
+	}
+
+	public List<String> get(List<String> args) {
 
 		List<String> results = new ArrayList<>();
-		String search = args.length > 0 ? args[args.length - 1] : "";
+		String search = args.isEmpty() ? args.get(args.size() - 1) : "";
 
-		completionMap.getOrDefault(args.length, new ArrayList<>())
+		completionMap.getOrDefault(args.size(), new ArrayList<>())
 				.stream()
 				.filter(c -> c.passes(search))
 				.forEach(c -> results.add(c.getResult()));
