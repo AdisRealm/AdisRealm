@@ -2,11 +2,12 @@ package adiitya.adisrealm.command;
 
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Command {
+public abstract class Command implements TabExecutor {
 
 	@Getter private final String name;
 	@Getter private final String usage;

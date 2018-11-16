@@ -1,6 +1,6 @@
 package adiitya.adisrealm.commands;
 
-import adiitya.adisrealm.command.PlayerCommand;
+import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletions;
 import adiitya.adisrealm.utils.MessageManager;
@@ -12,23 +12,26 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public final class MessageCommand extends PlayerCommand {
+public final class MessageCommand extends SingleCommand {
 
 	public MessageCommand() {
-		super("msg");
+		super("msg", "/msg <player> <msg>");
 	}
 
 	@Override
-	public void execute(Player sender, String label, List<String> args) {
+	public void execute(CommandSender sender, List<String> args) {
 
-		if (args.size() < 2)
+		if (!(sender instanceof Player))
+			sender.sendMessage("You must be a player to use that!");
+		else if (args.size() < 2)
 			sender.sendMessage("§cUsage: " + getUsage());
 		else {
 
+			Player player = (Player) sender;
 			Optional<UUID> target = Utils.getUUID(args.get(0));
 
 			if (target.isPresent())
-				processMessage(sender, target.get(), args);
+				processMessage(player, target.get(), args);
 			else
 				sender.sendMessage("§cPlayer not found");
 		}

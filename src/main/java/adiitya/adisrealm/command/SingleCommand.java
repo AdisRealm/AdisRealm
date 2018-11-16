@@ -1,12 +1,11 @@
 package adiitya.adisrealm.command;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class SingleCommand extends Command implements TabExecutor {
+public abstract class SingleCommand extends Command {
 
 	public SingleCommand(String name, String usage) {
 		super(name, usage);
