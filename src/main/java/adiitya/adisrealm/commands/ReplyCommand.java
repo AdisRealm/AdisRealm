@@ -16,7 +16,7 @@ import java.util.UUID;
 public final class ReplyCommand extends SingleCommand {
 
 	public ReplyCommand() {
-		super("r", "/r <message>");
+		super("r", "<message>");
 	}
 
 	@Override

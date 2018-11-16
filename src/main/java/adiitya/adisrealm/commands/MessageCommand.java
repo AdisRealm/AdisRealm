@@ -15,7 +15,7 @@ import java.util.*;
 public final class MessageCommand extends SingleCommand {
 
 	public MessageCommand() {
-		super("msg", "/msg <player> <msg>");
+		super("msg", "<player> <msg>");
 	}
 
 	@Override

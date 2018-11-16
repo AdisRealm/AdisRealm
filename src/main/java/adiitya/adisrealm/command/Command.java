@@ -29,5 +29,7 @@ public abstract class Command implements TabExecutor {
 	public abstract void execute(CommandSender sender, List<String> args);
 	public abstract List<String> tabComplete(CommandSender sender, List<String> args);
 
-	public abstract String getUsage();
+	public String getUsage() {
+		return String.format("/%s %s", getName(), usage);
+	}
 }

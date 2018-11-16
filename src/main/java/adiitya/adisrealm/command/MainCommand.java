@@ -2,12 +2,10 @@ package adiitya.adisrealm.command;
 
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class MainCommand extends Command {
 
@@ -36,14 +34,14 @@ public abstract class MainCommand extends Command {
 
 	public void execute(CommandSender sender, List<String> args) {
 
-		if (args.size() < requiredArgs) {
+		if (args.size() < requiredArgs || args.isEmpty()) {
 			sender.sendMessage(getUsage());
 			return;
 		}
 
 		Optional<Command> subOptional = getChildren().stream()
-				.filter(child -> child.getName().equalsIgnoreCase(args.get(requiredArgs - 1)))
-				.findFirst();
+				.filter(child -> child.getName().equalsIgnoreCase(args.get(Math.max(requiredArgs - 1, 0))))
+				.findAny();
 
 		if (!subOptional.isPresent()) {
 			sender.sendMessage(getUsage());
@@ -51,7 +49,10 @@ public abstract class MainCommand extends Command {
 		}
 
 		Command subCommand = subOptional.get();
-		List<String> subArgs = args.subList(requiredArgs, args.size());
+		List<String> subArgs = new ArrayList<>();
+
+		if (args.size() > requiredArgs)
+				subArgs.addAll(args.subList(Math.max(requiredArgs, 1), args.size()));
 
 		if (!subCommand.getArgumentCount().test(subArgs.size())) {
 			sender.sendMessage(subCommand.getUsage());

@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class SingleCommand extends Command {
 
 	public SingleCommand(String name, String usage) {
-		super(name, usage);
+		super(name, usage, i -> false);
 	}
 
 	@Override
