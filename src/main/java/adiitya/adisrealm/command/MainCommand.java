@@ -1,8 +1,6 @@
 package adiitya.adisrealm.command;
 
 import adiitya.adisrealm.command.completion.TabCompleter;
-import adiitya.adisrealm.command.completion.TabCompletion;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -64,9 +62,7 @@ public abstract class MainCommand extends Command {
 
 	public List<String> tabComplete(CommandSender sender, List<String> args) {
 
-		return new TabCompleter()
-				.add(1, getTabCompletions())
-				.get(args);
+		return new TabCompleter().get(args);
 	}
 
 	@Override
@@ -90,22 +86,5 @@ public abstract class MainCommand extends Command {
 		usageList.add(subUsage.toString());
 
 		return String.join(" ", usageList);
-	}
-
-	private List<TabCompletion> getTabCompletions() {
-
-		List<TabCompletion> completions = getCompletionsFromUsage();
-
-		return completions;
-	}
-
-	private List<TabCompletion> getCompletionsFromUsage() {
-
-		List<TabCompletion> completions = new ArrayList<>();
-
-		//for (String arg : usage.replace("[\\(|\\)|<|>]", "").split(" "))
-
-
-		return completions;
 	}
 }
