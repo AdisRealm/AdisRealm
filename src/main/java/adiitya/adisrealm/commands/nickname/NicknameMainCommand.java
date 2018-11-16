@@ -1,7 +1,6 @@
-package adiitya.adisrealm.commands;
+package adiitya.adisrealm.commands.nickname;
 
 import adiitya.adisrealm.command.MainCommand;
-import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
 import adiitya.adisrealm.command.completion.TabCompletions;
 import adiitya.adisrealm.utils.DataManager;
@@ -13,16 +12,18 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NicknameCommand extends MainCommand {
+public class NicknameMainCommand extends MainCommand {
 
-	public NicknameCommand() {
-	    super("nickname");
+	public NicknameMainCommand() {
+	    super("nickname", "/nickname", 0, Arrays.asList(
+	    		new NicknameListCommand()
+	    ));
 	}
 
-	@Override
-	public void execute(CommandSender sender, String label, List<String> args) {
+	/*@Override
+	public void execute(CommandSender sender, List<String> args) {
 
-		if (!args.isEmpty()) {
+		//*if (!args.isEmpty()) {
 
 			String arg = args.get(0);
 
@@ -33,10 +34,10 @@ public class NicknameCommand extends MainCommand {
 			else if (arg.equalsIgnoreCase("remove"))
 				removeNickname(sender, args);
 			else
-				sender.sendMessage("§cUSAGE: /" + label + " <add | remove| list> ...");
+				sender.sendMessage(getUsage());
 		} else {
-			sender.sendMessage("§cUSAGE: /" + label + " <add | remove | list> ...");
-		}
+			sender.sendMessage(getUsage());
+		}*./
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class NicknameCommand extends MainCommand {
 				.add(2, getRemoveCompletions(sender, args))
 				.add(2, getListCompletions(args))
 				.get(args);
-	}
+	}*/
 
 	private List<TabCompletion> getListCompletions(List<String> args) {
 

@@ -1,24 +1,31 @@
 package adiitya.adisrealm.command;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import adiitya.adisrealm.command.completion.TabCompleter;
+import adiitya.adisrealm.command.completion.TabCompletion;
+import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class MainCommand implements TabExecutor {
+public abstract class MainCommand extends Command {
 
-	protected final String name;
+	private final int requiredArgs;
 
-	public MainCommand(String name) {
-		this.name = name;
+	public MainCommand(String name, String usage, int requiredArgs) {
+		super(name, usage, i -> false);
+		this.requiredArgs = requiredArgs;
+	}
+
+	public MainCommand(String name, String usage, int requiredArgs, List<Command> children) {
+		super(name, usage, i -> false, children);
+		this.requiredArgs = requiredArgs;
 	}
 
 	@Override
 	public final boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-
-		execute(sender, label, Arrays.asList(args));
-
+		execute(sender, Arrays.asList(args));
 		return true;
 	}
 
@@ -27,14 +34,77 @@ public abstract class MainCommand implements TabExecutor {
 		return tabComplete(sender, Arrays.asList(args));
 	}
 
-	protected String getUsage() {
-		return Bukkit.getPluginCommand(getName()).getUsage();
+	public void execute(CommandSender sender, List<String> args) {
+
+		if (args.size() < requiredArgs) {
+			sender.sendMessage(getUsage());
+			return;
+		}
+
+		Optional<Command> subOptional = getChildren().stream()
+				.filter(child -> child.getName().equalsIgnoreCase(args.get(requiredArgs - 1)))
+				.findFirst();
+
+		if (!subOptional.isPresent()) {
+			sender.sendMessage(getUsage());
+			return;
+		}
+
+		Command subCommand = subOptional.get();
+		List<String> subArgs = args.subList(requiredArgs, args.size());
+
+		if (!subCommand.getArgumentCount().test(subArgs.size())) {
+			sender.sendMessage(subCommand.getUsage());
+			return;
+		}
+
+		subCommand.execute(sender, subArgs);
 	}
 
-	public final String getName() {
-		return name;
+	public List<String> tabComplete(CommandSender sender, List<String> args) {
+
+		return new TabCompleter()
+				.add(1, getTabCompletions())
+				.get(args);
 	}
 
-	public abstract void execute(CommandSender sender, String alias, List<String> args);
-	public abstract List<String> tabComplete(CommandSender sender, List<String> args);
+	@Override
+	public String getUsage() {
+
+		List<String> usageList = new ArrayList<>();
+		usageList.add("/");
+		usageList.add(getName());
+		usageList.add(usage);
+
+		if (getChildren().isEmpty())
+			return String.join(" ", usageList);
+
+		StringBuilder subUsage = new StringBuilder("<");
+		List<String> subList = new ArrayList<>();
+
+		for (Command child : getChildren())
+			subList.add(child.getName());
+
+		subUsage.append(String.join(" | ", subList)).append(">");
+		usageList.add(subUsage.toString());
+
+		return String.join(" ", usageList);
+	}
+
+	private List<TabCompletion> getTabCompletions() {
+
+		List<TabCompletion> completions = getCompletionsFromUsage();
+
+		return completions;
+	}
+
+	private List<TabCompletion> getCompletionsFromUsage() {
+
+		List<TabCompletion> completions = new ArrayList<>();
+
+		//for (String arg : usage.replace("[\\(|\\)|<|>]", "").split(" "))
+
+
+		return completions;
+	}
 }

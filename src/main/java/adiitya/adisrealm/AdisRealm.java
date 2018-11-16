@@ -1,14 +1,13 @@
 package adiitya.adisrealm;
 
 import adiitya.adisrealm.command.Command;
-import adiitya.adisrealm.command.MainCommand;
 import adiitya.adisrealm.commands.*;
+import adiitya.adisrealm.commands.nickname.NicknameMainCommand;
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.event.*;
 import adiitya.adisrealm.utils.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,7 +45,7 @@ public final class AdisRealm extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		addCommand(new NicknameCommand());
+		addCommand(new NicknameMainCommand());
 		addCommand(new MessageCommand());
 		addCommand(new ReplyCommand());
 
