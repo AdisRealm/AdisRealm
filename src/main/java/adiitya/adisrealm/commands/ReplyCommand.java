@@ -1,6 +1,6 @@
 package adiitya.adisrealm.commands;
 
-import adiitya.adisrealm.command.PlayerCommand;
+import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
 import adiitya.adisrealm.command.completion.TabCompletions;
@@ -13,16 +13,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public final class ReplyCommand extends PlayerCommand {
+public final class ReplyCommand extends SingleCommand {
 
 	public ReplyCommand() {
-		super("r");
+		super("r", "/r <message>");
 	}
 
 	@Override
-	public void execute(Player sender, String label, List<String> args) {
+	public void execute(CommandSender sender, List<String> args) {
 
-		Optional<UUID> lastRecipient = MessageManager.getLastRecipient(sender.getUniqueId());
+		if (!(sender instanceof Player)) {
+			sender.sendMessage("You must be a player to use that!");
+			return;
+		}
+
+		Player player = (Player) sender;
+		Optional<UUID> lastRecipient = MessageManager.getLastRecipient(player.getUniqueId());
 
 		if (args.isEmpty()) {
 			sender.sendMessage("§cUsage: " + getUsage());
@@ -34,7 +40,7 @@ public final class ReplyCommand extends PlayerCommand {
 
 			String message = String.join(" ", args);
 			Player target = Bukkit.getPlayer(lastRecipient.get());
-			MessageManager.sendMessage(sender, target, message);
+			MessageManager.sendMessage(player, target, message);
 		}
 	}
 
