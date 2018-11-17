@@ -1,6 +1,5 @@
 package adiitya.adisrealm.command;
 
-import adiitya.adisrealm.command.completion.TabCompleter;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -12,12 +11,15 @@ public abstract class MainCommand extends Command {
 	public MainCommand(String name, String usage, int requiredArgs) {
 		super(name, usage, i -> false);
 		this.requiredArgs = requiredArgs;
+		initChildren();
 	}
 
 	public MainCommand(String name, String usage, int requiredArgs, List<Command> children) {
 		super(name, usage, i -> false, children);
 		this.requiredArgs = requiredArgs;
 	}
+
+	protected abstract void initChildren();
 
 	@Override
 	public final boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
@@ -33,7 +35,7 @@ public abstract class MainCommand extends Command {
 	public void execute(CommandSender sender, List<String> args) {
 
 		if (args.size() < requiredArgs || args.isEmpty()) {
-			sender.sendMessage(getUsage());
+			sender.sendMessage(String.format("§cUSAGE: %s", getUsage()));
 			return;
 		}
 
@@ -42,7 +44,7 @@ public abstract class MainCommand extends Command {
 				.findAny();
 
 		if (!subOptional.isPresent()) {
-			sender.sendMessage(getUsage());
+			sender.sendMessage(String.format("§cUSAGE: %s", getUsage()));
 			return;
 		}
 
@@ -53,7 +55,7 @@ public abstract class MainCommand extends Command {
 				subArgs.addAll(args.subList(Math.max(requiredArgs, 1), args.size()));
 
 		if (!subCommand.getArgumentCount().test(subArgs.size())) {
-			sender.sendMessage(subCommand.getUsage());
+			sender.sendMessage(String.format("§cUSAGE: %s", subCommand.getUsage()));
 			return;
 		}
 
@@ -61,20 +63,17 @@ public abstract class MainCommand extends Command {
 	}
 
 	public List<String> tabComplete(CommandSender sender, List<String> args) {
-
-		return new TabCompleter().get(args);
+		return Collections.emptyList();
 	}
 
 	@Override
 	public String getUsage() {
 
-		List<String> usageList = new ArrayList<>();
-		usageList.add("/");
-		usageList.add(getName());
-		usageList.add(usage);
-
 		if (getChildren().isEmpty())
-			return String.join(" ", usageList);
+			return getRawUsage();
+
+		List<String> usageList = new ArrayList<>();
+		usageList.add(getRawUsage());
 
 		StringBuilder subUsage = new StringBuilder("<");
 		List<String> subList = new ArrayList<>();
@@ -86,5 +85,10 @@ public abstract class MainCommand extends Command {
 		usageList.add(subUsage.toString());
 
 		return String.join(" ", usageList);
+	}
+
+	@Override
+	public String getRawUsage() {
+		return "/" + super.getRawUsage();
 	}
 }

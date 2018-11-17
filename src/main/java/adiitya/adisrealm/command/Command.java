@@ -13,7 +13,7 @@ public abstract class Command implements TabExecutor {
 	@Getter private final String name;
 	protected final String usage;
 	@Getter private final Predicate<Integer> argumentCount;
-	@Getter private final List<Command> children;
+	@Getter protected final List<Command> children;
 
 	public Command(String name, String usage, Predicate<Integer> argumentCount) {
 		this(name, usage, argumentCount, new ArrayList<>());
@@ -30,6 +30,10 @@ public abstract class Command implements TabExecutor {
 	public abstract List<String> tabComplete(CommandSender sender, List<String> args);
 
 	public String getUsage() {
-		return String.format("/%s %s", getName(), usage);
+		return String.format("/%s", getRawUsage());
+	}
+
+	public String getRawUsage() {
+		return String.format("%s %s", getName(), usage).trim();
 	}
 }

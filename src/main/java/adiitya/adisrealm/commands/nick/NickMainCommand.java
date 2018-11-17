@@ -1,4 +1,4 @@
-package adiitya.adisrealm.commands.nickname;
+package adiitya.adisrealm.commands.nick;
 
 import adiitya.adisrealm.command.MainCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
@@ -11,14 +11,18 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NicknameMainCommand extends MainCommand {
+public class NickMainCommand extends MainCommand {
 
-	public NicknameMainCommand() {
-		super("nickname", "", 0, Arrays.asList(
-				new NicknameListCommand(),
-				new NicknameAddCommand(),
-				new NicknameRemoveCommand()
-		));
+	public NickMainCommand() {
+		super("nick", "", 0);
+	}
+
+	@Override
+	protected void initChildren() {
+
+		children.add(new NickListCommand(this));
+		children.add(new NickAddCommand(this));
+		children.add(new NickRemoveCommand(this));
 	}
 
 	@Override

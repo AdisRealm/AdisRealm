@@ -2,7 +2,7 @@ package adiitya.adisrealm;
 
 import adiitya.adisrealm.command.Command;
 import adiitya.adisrealm.commands.*;
-import adiitya.adisrealm.commands.nickname.NicknameMainCommand;
+import adiitya.adisrealm.commands.nick.NickMainCommand;
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.event.*;
 import adiitya.adisrealm.utils.DataManager;
@@ -45,7 +45,7 @@ public final class AdisRealm extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		addCommand(new NicknameMainCommand());
+		addCommand(new NickMainCommand());
 		addCommand(new MessageCommand());
 		addCommand(new ReplyCommand());
 		addCommand(new AFKCommand());

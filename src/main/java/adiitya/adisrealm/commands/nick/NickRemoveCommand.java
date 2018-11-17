@@ -1,4 +1,4 @@
-package adiitya.adisrealm.commands.nickname;
+package adiitya.adisrealm.commands.nick;
 
 import adiitya.adisrealm.command.SubCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class NicknameRemoveCommand extends SubCommand {
+public class NickRemoveCommand extends SubCommand {
 
-	public NicknameRemoveCommand() {
-		super("remove", i -> i > 0);
+	public NickRemoveCommand(NickMainCommand parent) {
+		super("remove", "<nick>", i -> i > 0, parent);
 	}
 
 	@SuppressWarnings("Duplicates")
@@ -27,7 +27,7 @@ public class NicknameRemoveCommand extends SubCommand {
 		String nick = args.get(0);
 
 		DataManager.removeNickname(player.getUniqueId(), nick);
-		sender.sendMessage("§9Removed nickname §c" + nick);
+		sender.sendMessage("§9Removed nick §c" + nick);
 	}
 
 	@Override

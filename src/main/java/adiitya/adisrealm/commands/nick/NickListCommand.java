@@ -1,4 +1,4 @@
-package adiitya.adisrealm.commands.nickname;
+package adiitya.adisrealm.commands.nick;
 
 import adiitya.adisrealm.command.SubCommand;
 import adiitya.adisrealm.utils.DataManager;
@@ -13,10 +13,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public final class NicknameListCommand extends SubCommand {
+public final class NickListCommand extends SubCommand {
 
-	public NicknameListCommand() {
-		super("list", count -> true);
+	public NickListCommand(NickMainCommand parent) {
+		super("list", "[player]", count -> true, parent);
 	}
 
 	@Override
@@ -33,11 +33,6 @@ public final class NicknameListCommand extends SubCommand {
 	@Override
 	public List<String> tabComplete(CommandSender sender, List<String> args) {
 		return Collections.emptyList();
-	}
-
-	@Override
-	public String getUsage() {
-		return usage;
 	}
 
 	private void listFromUsername(CommandSender sender, String name) {

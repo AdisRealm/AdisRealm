@@ -8,8 +8,13 @@ import java.util.function.Predicate;
 
 public abstract class SubCommand extends Command {
 
-	public SubCommand(String name, Predicate<Integer> argumentCount) {
-		super(name, "", argumentCount);
+	private final Command parent;
+
+	public SubCommand(String name, String usage, Predicate<Integer> argumentCount, Command parent) {
+
+		super(name, usage, argumentCount);
+
+		this.parent = parent;
 	}
 
 	@Override
@@ -21,5 +26,10 @@ public abstract class SubCommand extends Command {
 	@Override
 	public final List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 		return tabComplete(sender, Arrays.asList(args));
+	}
+
+	@Override
+	public String getUsage() {
+		return String.format("%s %s", parent.getRawUsage(), getRawUsage()).trim();
 	}
 }
