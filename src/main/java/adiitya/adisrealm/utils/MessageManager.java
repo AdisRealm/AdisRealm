@@ -24,7 +24,7 @@ public final class MessageManager {
 		messagePairs.put(target.getUniqueId(), sender.getUniqueId());
 
 		if (AFKManager.isAFK(target.getUniqueId()))
-			sender.sendMessage(target.getDisplayName() + "§9 is currently AFK!");
+			sender.sendMessage(target.getDisplayName() + "§9 is currently AFK:§6§l " + AFKManager.getReason(target.getUniqueId()).orElse("No reason"));
 
 		sender.sendMessage(getOutMessage(target, message));
 		target.sendMessage(getInMessage(sender, message));

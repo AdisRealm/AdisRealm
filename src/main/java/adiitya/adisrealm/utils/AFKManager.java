@@ -22,6 +22,10 @@ public class AFKManager {
 		player.setPlayerListName("§6[§lAFK§r§6]§7" + player.getDisplayName());
 	}
 
+	public Optional<String> getReason(UUID uuid) {
+		return afkReasons.getOrDefault(uuid, Optional.empty());
+	}
+
 	public void exitAFK(UUID uuid) {
 
 		afkReasons.remove(uuid);
