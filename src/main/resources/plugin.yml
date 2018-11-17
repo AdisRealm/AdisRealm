@@ -6,17 +6,15 @@ commands:
   nickname:
     description: Used to manage nicknames
     usage: /nick <add | remove | list>
-    aliases:
-      - nickname
-      - nick
+    aliases: [nickname, nick]
   msg:
     description: Sends a message to a player
     usage: /msg <player> <message>
-    aliases:
-      - msg
-      - m
+    aliases: [msg]
   r:
     description: Used to reply to the last person you messaged
     usage: /r <message>
-    aliases:
-      - r
+    aliases: [r]
+  afk:
+    usage: /afk [reason]
+    aliases: [afk]

@@ -10,6 +10,10 @@ public final class TabCompleter {
 		completionMap = new HashMap<>();
 	}
 
+	public static List<String> empty() {
+		return new TabCompleter().get(new ArrayList<>());
+	}
+
 	public TabCompleter add(int pos, TabCompletion completion) {
 
 		List<TabCompletion> completions = completionMap.getOrDefault(pos, new ArrayList<>());

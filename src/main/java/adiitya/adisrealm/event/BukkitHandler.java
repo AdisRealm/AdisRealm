@@ -1,6 +1,9 @@
 package adiitya.adisrealm.event;
 
 import adiitya.adisrealm.discord.DiscordBot;
+import adiitya.adisrealm.utils.AFKManager;
+import adiitya.adisrealm.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import static org.bukkit.entity.EntityType.ENDERMAN;
@@ -38,6 +42,8 @@ public final class BukkitHandler implements Listener {
 
 		DiscordBot.onLeave();
 		DiscordBot.updateInfoMessage(false);
+
+		exitAFK(e.getPlayer(), false);
 	}
 
 	@EventHandler
@@ -47,5 +53,20 @@ public final class BukkitHandler implements Listener {
 
 		if (type.equals(ENDERMAN))
 			e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onMove(PlayerMoveEvent e) {
+
+		if (Utils.isMoved(e.getTo(), e.getFrom(), 0))
+			exitAFK(e.getPlayer(), true);
+	}
+
+	private void exitAFK(Player player, boolean broadcast) {
+
+		if (broadcast && AFKManager.isAFK(player.getUniqueId()))
+			Bukkit.broadcastMessage("§6§l[§c§l-§6§l]§f" + player.getDisplayName());
+
+		AFKManager.exitAFK(player.getUniqueId());
 	}
 }

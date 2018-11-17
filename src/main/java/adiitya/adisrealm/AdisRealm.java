@@ -48,6 +48,7 @@ public final class AdisRealm extends JavaPlugin {
 		addCommand(new NicknameMainCommand());
 		addCommand(new MessageCommand());
 		addCommand(new ReplyCommand());
+		addCommand(new AFKCommand());
 
 		try {
 			DiscordBot.connect(getServer());

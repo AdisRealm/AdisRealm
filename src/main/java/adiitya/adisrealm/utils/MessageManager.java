@@ -17,14 +17,17 @@ public final class MessageManager {
 
 	public void sendMessage(Player sender, Player target, String message) {
 
-			if (!sender.isOnline() || !target.isOnline())
-				return;
+		if (!sender.isOnline() || !target.isOnline())
+			return;
 
-			messagePairs.put(sender.getUniqueId(), target.getUniqueId());
-			messagePairs.put(target.getUniqueId(), sender.getUniqueId());
+		messagePairs.put(sender.getUniqueId(), target.getUniqueId());
+		messagePairs.put(target.getUniqueId(), sender.getUniqueId());
 
-			target.sendMessage(getInMessage(sender, message));
-			sender.sendMessage(getOutMessage(target, message));
+		if (AFKManager.isAFK(target.getUniqueId()))
+			sender.sendMessage(target.getDisplayName() + "§9 is currently AFK!");
+
+		sender.sendMessage(getOutMessage(target, message));
+		target.sendMessage(getInMessage(sender, message));
 	}
 
 	private String getOutMessage(Player target, String message) {
