@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 
 public final class NicknameListCommand extends SubCommand {
 
-	public NicknameListCommand() {
-		super("list", count -> true);
+	public NicknameListCommand(NickMainCommand parent) {
+		super("list", count -> true, parent);
 	}
 
 	@Override
@@ -33,11 +33,6 @@ public final class NicknameListCommand extends SubCommand {
 	@Override
 	public List<String> tabComplete(CommandSender sender, List<String> args) {
 		return Collections.emptyList();
-	}
-
-	@Override
-	public String getUsage() {
-		return usage;
 	}
 
 	private void listFromUsername(CommandSender sender, String name) {

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class NicknameRemoveCommand extends SubCommand {
 
-	public NicknameRemoveCommand() {
-		super("remove", i -> i > 0);
+	public NicknameRemoveCommand(NickMainCommand parent) {
+		super("remove", i -> i > 0, parent);
 	}
 
 	@SuppressWarnings("Duplicates")

@@ -10,8 +10,8 @@ import java.util.List;
 
 public final class NicknameAddCommand extends SubCommand {
 
-	public NicknameAddCommand() {
-		super("add", i -> i > 0);
+	public NicknameAddCommand(NickMainCommand parent) {
+		super("add", i -> i > 0, parent);
 	}
 
 	@Override

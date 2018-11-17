@@ -12,12 +12,15 @@ public abstract class MainCommand extends Command {
 	public MainCommand(String name, String usage, int requiredArgs) {
 		super(name, usage, i -> false);
 		this.requiredArgs = requiredArgs;
+		initChildren();
 	}
 
 	public MainCommand(String name, String usage, int requiredArgs, List<Command> children) {
 		super(name, usage, i -> false, children);
 		this.requiredArgs = requiredArgs;
 	}
+
+	protected abstract void initChildren();
 
 	@Override
 	public final boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
@@ -69,9 +72,7 @@ public abstract class MainCommand extends Command {
 	public String getUsage() {
 
 		List<String> usageList = new ArrayList<>();
-		usageList.add("/");
-		usageList.add(getName());
-		usageList.add(usage);
+		usageList.add(getRawUsage());
 
 		if (getChildren().isEmpty())
 			return String.join(" ", usageList);
@@ -84,6 +85,17 @@ public abstract class MainCommand extends Command {
 
 		subUsage.append(String.join(" | ", subList)).append(">");
 		usageList.add(subUsage.toString());
+
+		return String.join(" ", usageList);
+	}
+
+	@Override
+	public String getRawUsage() {
+
+		List<String> usageList = new ArrayList<>();
+		usageList.add("/");
+		usageList.add(getName());
+		usageList.add(usage);
 
 		return String.join(" ", usageList);
 	}

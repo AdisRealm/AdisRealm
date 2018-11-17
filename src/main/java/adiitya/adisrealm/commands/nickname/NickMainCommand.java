@@ -11,14 +11,18 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NicknameMainCommand extends MainCommand {
+public class NickMainCommand extends MainCommand {
 
-	public NicknameMainCommand() {
-		super("nickname", "", 0, Arrays.asList(
-				new NicknameListCommand(),
-				new NicknameAddCommand(),
-				new NicknameRemoveCommand()
-		));
+	public NickMainCommand() {
+		super("nick", "", 0);
+	}
+
+	@Override
+	protected void initChildren() {
+
+		children.add(new NicknameListCommand(this));
+		children.add(new NicknameAddCommand(this));
+		children.add(new NicknameRemoveCommand(this));
 	}
 
 	@Override
