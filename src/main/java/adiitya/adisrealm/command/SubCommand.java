@@ -10,9 +10,9 @@ public abstract class SubCommand extends Command {
 
 	private final Command parent;
 
-	public SubCommand(String name, Predicate<Integer> argumentCount, Command parent) {
+	public SubCommand(String name, String usage, Predicate<Integer> argumentCount, Command parent) {
 
-		super(name, "", argumentCount);
+		super(name, usage, argumentCount);
 
 		this.parent = parent;
 	}
@@ -30,11 +30,6 @@ public abstract class SubCommand extends Command {
 
 	@Override
 	public String getUsage() {
-		return parent.getRawUsage() + " " + getRawUsage();
-	}
-
-	@Override
-	public String getRawUsage() {
-		return getName() + " " + usage;
+		return String.format("%s %s", parent.getRawUsage(), getRawUsage()).trim();
 	}
 }

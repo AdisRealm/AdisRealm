@@ -30,8 +30,10 @@ public abstract class Command implements TabExecutor {
 	public abstract List<String> tabComplete(CommandSender sender, List<String> args);
 
 	public String getUsage() {
-		return String.format("/%s %s", getName(), usage);
+		return String.format("/%s", getRawUsage());
 	}
 
-	public abstract String getRawUsage();
+	public String getRawUsage() {
+		return String.format("%s %s", getName(), usage).trim();
+	}
 }

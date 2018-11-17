@@ -2,7 +2,7 @@ package adiitya.adisrealm;
 
 import adiitya.adisrealm.command.Command;
 import adiitya.adisrealm.commands.*;
-import adiitya.adisrealm.commands.nickname.NickMainCommand;
+import adiitya.adisrealm.commands.nick.NickMainCommand;
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.event.*;
 import adiitya.adisrealm.utils.DataManager;

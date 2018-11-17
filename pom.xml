@@ -83,6 +83,7 @@
             <groupId>com.github.seeseemelk</groupId>
             <artifactId>MockBukkit</artifactId>
             <version>v1.13-6681740822-1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>

@@ -1,4 +1,4 @@
-package adiitya.adisrealm.commands.nickname;
+package adiitya.adisrealm.commands.nick;
 
 import adiitya.adisrealm.command.MainCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
@@ -20,9 +20,9 @@ public class NickMainCommand extends MainCommand {
 	@Override
 	protected void initChildren() {
 
-		children.add(new NicknameListCommand(this));
-		children.add(new NicknameAddCommand(this));
-		children.add(new NicknameRemoveCommand(this));
+		children.add(new NickListCommand(this));
+		children.add(new NickAddCommand(this));
+		children.add(new NickRemoveCommand(this));
 	}
 
 	@Override

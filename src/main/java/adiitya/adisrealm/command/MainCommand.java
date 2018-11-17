@@ -1,6 +1,5 @@
 package adiitya.adisrealm.command;
 
-import adiitya.adisrealm.command.completion.TabCompleter;
 import org.bukkit.command.CommandSender;
 
 import java.util.*;
@@ -36,7 +35,7 @@ public abstract class MainCommand extends Command {
 	public void execute(CommandSender sender, List<String> args) {
 
 		if (args.size() < requiredArgs || args.isEmpty()) {
-			sender.sendMessage(getUsage());
+			sender.sendMessage(String.format("§cUSAGE: %s", getUsage()));
 			return;
 		}
 
@@ -45,7 +44,7 @@ public abstract class MainCommand extends Command {
 				.findAny();
 
 		if (!subOptional.isPresent()) {
-			sender.sendMessage(getUsage());
+			sender.sendMessage(String.format("§cUSAGE: %s", getUsage()));
 			return;
 		}
 
@@ -56,7 +55,7 @@ public abstract class MainCommand extends Command {
 				subArgs.addAll(args.subList(Math.max(requiredArgs, 1), args.size()));
 
 		if (!subCommand.getArgumentCount().test(subArgs.size())) {
-			sender.sendMessage(subCommand.getUsage());
+			sender.sendMessage(String.format("§cUSAGE: %s", subCommand.getUsage()));
 			return;
 		}
 
@@ -64,18 +63,17 @@ public abstract class MainCommand extends Command {
 	}
 
 	public List<String> tabComplete(CommandSender sender, List<String> args) {
-
-		return new TabCompleter().get(args);
+		return Collections.emptyList();
 	}
 
 	@Override
 	public String getUsage() {
 
+		if (getChildren().isEmpty())
+			return getRawUsage();
+
 		List<String> usageList = new ArrayList<>();
 		usageList.add(getRawUsage());
-
-		if (getChildren().isEmpty())
-			return String.join(" ", usageList);
 
 		StringBuilder subUsage = new StringBuilder("<");
 		List<String> subList = new ArrayList<>();
@@ -91,12 +89,6 @@ public abstract class MainCommand extends Command {
 
 	@Override
 	public String getRawUsage() {
-
-		List<String> usageList = new ArrayList<>();
-		usageList.add("/");
-		usageList.add(getName());
-		usageList.add(usage);
-
-		return String.join(" ", usageList);
+		return "/" + super.getRawUsage();
 	}
 }

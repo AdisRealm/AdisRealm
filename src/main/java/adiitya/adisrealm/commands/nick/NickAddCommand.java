@@ -1,4 +1,4 @@
-package adiitya.adisrealm.commands.nickname;
+package adiitya.adisrealm.commands.nick;
 
 import adiitya.adisrealm.command.SubCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public final class NicknameAddCommand extends SubCommand {
+public final class NickAddCommand extends SubCommand {
 
-	public NicknameAddCommand(NickMainCommand parent) {
-		super("add", i -> i > 0, parent);
+	public NickAddCommand(NickMainCommand parent) {
+		super("add", "<nick>", i -> i > 0, parent);
 	}
 
 	@Override
@@ -29,15 +29,15 @@ public final class NicknameAddCommand extends SubCommand {
 		if (status == 0) // success
 			sender.sendMessage("§9Successfully nicknamed you §6" + nick);
 		else if (status == 1) // taken
-			sender.sendMessage("§9The nickname §6" + nick + " §9is taken");
+			sender.sendMessage("§9The nick §6" + nick + " §9is taken");
 		else if (status == 2) // duplicate (user already has nick)
-			sender.sendMessage("§9You already have the nickname §6" + nick);
+			sender.sendMessage("§9You already have the nick §6" + nick);
 		else if (status == 3) // username
-			sender.sendMessage("§9The nickname §6" + nick + " §9is somebodies username");
+			sender.sendMessage("§9The nick §6" + nick + " §9is somebodies username");
 		else if (status == 5) // bad length
-			sender.sendMessage("§9The nickname §6" + nick + " §9is too long or short");
+			sender.sendMessage("§9The nick §6" + nick + " §9is too long or short");
 		else // error
-			sender.sendMessage("§9An unknown error occurred and your nickname hasn't been added");
+			sender.sendMessage("§9An unknown error occurred and your nick hasn't been added");
 	}
 
 	@Override

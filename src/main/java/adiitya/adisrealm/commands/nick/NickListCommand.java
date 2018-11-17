@@ -1,4 +1,4 @@
-package adiitya.adisrealm.commands.nickname;
+package adiitya.adisrealm.commands.nick;
 
 import adiitya.adisrealm.command.SubCommand;
 import adiitya.adisrealm.utils.DataManager;
@@ -13,10 +13,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public final class NicknameListCommand extends SubCommand {
+public final class NickListCommand extends SubCommand {
 
-	public NicknameListCommand(NickMainCommand parent) {
-		super("list", count -> true, parent);
+	public NickListCommand(NickMainCommand parent) {
+		super("list", "[player]", count -> true, parent);
 	}
 
 	@Override
