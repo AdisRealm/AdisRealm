@@ -31,8 +31,14 @@ public final class AFKCommand extends SingleCommand {
 
 		boolean isAFK = AFKManager.isAFK(player.getUniqueId());
 
-		if (!isAFK)
-			Bukkit.broadcastMessage(reason.isEmpty() ? "§6§l[§a§l+§6§l]§f" + player.getDisplayName() : "§6§l[§a§l+§6§l]§f" + player.getDisplayName() + ": §6§l" + reason);
+		if (!isAFK) {
+
+			String message = reason.isEmpty() ? "§6§l[§a§l+§6§l]§f" + player.getDisplayName()
+					: "§6§l[§a§l+§6§l]§f" + player.getDisplayName() + ": §6§l" + reason;
+
+			Bukkit.getConsoleSender().sendMessage(message);
+			Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(message));
+		}
 
 		AFKManager.enterAFK(player.getUniqueId(), reason);
 	}

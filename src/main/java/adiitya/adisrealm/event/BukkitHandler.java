@@ -64,8 +64,14 @@ public final class BukkitHandler implements Listener {
 
 	private void exitAFK(Player player, boolean broadcast) {
 
-		if (broadcast && AFKManager.isAFK(player.getUniqueId()))
-			Bukkit.broadcastMessage("§6§l[§c§l-§6§l]§f" + player.getDisplayName());
+		if (broadcast && AFKManager.isAFK(player.getUniqueId())) {
+
+			String message = "§6§l[§c§l-§6§l]§f" + player.getDisplayName();
+			Bukkit.getConsoleSender().sendMessage(message);
+
+			for (Player p : Bukkit.getOnlinePlayers())
+				p.sendMessage(message);
+		}
 
 		AFKManager.exitAFK(player.getUniqueId());
 	}
