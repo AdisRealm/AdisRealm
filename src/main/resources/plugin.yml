@@ -3,10 +3,10 @@ version: 0.2
 main: adiitya.adisrealm.AdisRealm
 load: STARTUP
 commands:
-  nickname:
+  nick:
     description: Used to manage nicknames
     usage: /nick <add | remove | list>
-    aliases: [nickname, nick]
+    aliases: [nick]
   msg:
     description: Sends a message to a player
     usage: /msg <player> <message>
