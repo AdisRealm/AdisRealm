@@ -1,6 +1,7 @@
 package adiitya.adisrealm.command.completion;
 
 import java.util.*;
+import java.util.function.BiPredicate;
 
 public final class TabCompleter {
 
@@ -27,6 +28,15 @@ public final class TabCompleter {
 	public TabCompleter add(int pos, List<TabCompletion> completions) {
 
 		completions.forEach(c -> add(pos, c));
+
+		return this;
+	}
+
+	public TabCompleter add(int pos, List<String> completions, BiPredicate<String, String> condition) {
+
+		completions.stream()
+				.map(s -> new TabCompletion(s, test -> condition.test(test, s)))
+				.forEach(c -> add(pos, c));
 
 		return this;
 	}

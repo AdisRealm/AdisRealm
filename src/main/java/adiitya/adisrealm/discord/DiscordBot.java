@@ -61,31 +61,33 @@ public final class DiscordBot {
 
 	private boolean initMessage() {
 
-		if (!client.isReady())
-			return false;
+		try {
 
-		FileConfiguration config = AdisRealm.getInstance().getConfig();
+			FileConfiguration config = AdisRealm.getInstance().getConfig();
 
-		if (!config.contains("infoId"))
-			return false;
+			if (!config.contains("infoId"))
+				return false;
 
-		if (!config.contains("guildId"))
-			return false;
+			if (!config.contains("guildId"))
+				return false;
 
-		IGuild g = client.getGuildByID(config.getLong("guildId"));
-		IMessage message;
+			IGuild g = client.getGuildByID(config.getLong("guildId"));
+			IMessage message;
 
-		if (g != null) {
-			guild = g;
-			message = g.getMessageByID(config.getLong("infoId"));
-		} else {
+			if (g != null) {
+				guild = g;
+				message = g.getMessageByID(config.getLong("infoId"));
+			} else {
+				return false;
+			}
+
+			if (message != null)
+				infoMessage = message;
+			else
+				return false;
+		} catch(Exception e) {
 			return false;
 		}
-
-		if (message != null)
-			infoMessage = message;
-		else
-			return false;
 
 		return true;
 	}

@@ -19,7 +19,7 @@ public class AFKManager {
 		afkReasons.put(uuid, r);
 
 		Player player = Bukkit.getPlayer(uuid);
-		player.setPlayerListName("§6[§lAFK§r§6]§7" + player.getDisplayName());
+		player.setPlayerListName("§6[§lAFK§r§6]" + player.getDisplayName());
 	}
 
 	public Optional<String> getReason(UUID uuid) {
@@ -28,10 +28,10 @@ public class AFKManager {
 
 	public void exitAFK(UUID uuid) {
 
-		afkReasons.remove(uuid);
-
 		Player player = Bukkit.getPlayer(uuid);
-		player.setPlayerListName("§7" + player.getDisplayName());
+		player.setPlayerListName(player.getDisplayName());
+
+		afkReasons.remove(uuid);
 	}
 
 	public boolean isAFK(UUID uuid) {

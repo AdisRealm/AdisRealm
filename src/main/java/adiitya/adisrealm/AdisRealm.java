@@ -49,6 +49,7 @@ public final class AdisRealm extends JavaPlugin {
 		addCommand(new MessageCommand());
 		addCommand(new ReplyCommand());
 		addCommand(new AFKCommand());
+		addCommand(new ColorCommand());
 
 		try {
 			DiscordBot.connect(getServer());
@@ -62,9 +63,6 @@ public final class AdisRealm extends JavaPlugin {
 	private void addCommand(Command cmd) {
 
 		PluginCommand command = getCommand(cmd.getName());
-
-		log.fine(() -> String.format("Registering command %s", cmd.getName()));
-
 		command.setExecutor(cmd);
 		command.setTabCompleter(cmd);
 	}
