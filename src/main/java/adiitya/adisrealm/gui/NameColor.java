@@ -3,6 +3,8 @@ package adiitya.adisrealm.gui;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
+import java.util.Arrays;
+
 public enum NameColor {
 
 	BLACK(ChatColor.BLACK, Material.INK_SAC),
@@ -28,6 +30,13 @@ public enum NameColor {
 	NameColor(ChatColor color, Material mat) {
 		this.color = color;
 		this.mat = mat;
+	}
+
+	public static NameColor fromMaterial(Material material) {
+		return Arrays.stream(values())
+				.filter(n -> n.mat.equals(material))
+				.findAny()
+				.orElse(NameColor.WHITE);
 	}
 
 	public String getName() {

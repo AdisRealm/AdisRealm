@@ -7,11 +7,14 @@ import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import fr.minuskube.inv.content.SlotIterator;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
@@ -57,22 +60,42 @@ public final class ColorGUI {
 					.ifPresent(inv -> contents.set(5, 0, ClickableItem.of(BACK_ITEM, e -> inv.open(player))));
 		}
 
+		private void onClickColor(Player p, NameColor color, Inventory inv) {
+
+			NameColorManager.setColor(p.getUniqueId(), color.color);
+
+			for (int i = 0; i < 45; i++) {
+
+				if (inv.getItem(i) == null)
+					continue;
+
+				Material mat = inv.getItem(i).getType();
+				NameColor c = NameColor.fromMaterial(mat);
+				ItemBuilder b = new ItemBuilder(inv.getItem(i)).clearEnchants();
+
+				if (NameColorManager.isColor(p, c.color))
+					b.addEnchant(Enchantment.DURABILITY, 1);
+
+				inv.setItem(i, b.build());
+			}
+		}
+
 		private ClickableItem getItem(Player p, NameColor color) {
 
 			ItemBuilder b = new ItemBuilder(color.mat)
 					.addFlags(ItemFlag.HIDE_ENCHANTS)
-					.setName(color.getName())
-					.addLore(String.format("%s%s", color.color.toString(), p.getName()));
+					.setName(ChatColor.RESET + color.getName())
+					.addLore(String.format("%s%s", color.color, p.getName()));
 
 			if (NameColorManager.isColor(p, color.color))
 				b.addEnchant(Enchantment.DURABILITY, 1);
 
-			return ClickableItem.of(b.build(), e -> Bukkit.getScheduler().runTaskAsynchronously(AdisRealm.getInstance(), () -> NameColorManager.setColor(p.getUniqueId(), color.color)));
+			return ClickableItem.of(b.build(), e ->
+					Bukkit.getScheduler().runTaskAsynchronously(AdisRealm.getInstance(), () ->
+							onClickColor(p, color, e.getInventory())));
 		}
 
 		@Override
-		public void update(Player player, InventoryContents contents) {
-
-		}
+		public void update(Player player, InventoryContents contents) {}
 	}
 }
