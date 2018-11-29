@@ -2,6 +2,8 @@ name: AdisRealm
 version: 0.2
 main: adiitya.adisrealm.AdisRealm
 load: STARTUP
+depend: [SmartInvs]
+api-version: 1.13
 commands:
   nick:
     description: Used to manage nicknames
@@ -18,6 +20,6 @@ commands:
   afk:
     usage: /afk [reason]
     aliases: [afk]
-  color:
-    usage: /color <color>
-    aliases: [color]
+  settings:
+    usage: /settings
+    aliases: [settings, s]

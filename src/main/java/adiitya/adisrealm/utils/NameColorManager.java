@@ -51,4 +51,18 @@ public final class NameColorManager {
 		return colorTeams.stream()
 				.anyMatch(t -> t.hasEntry(player.getName()));
 	}
+
+	public ChatColor getColor(Player p) {
+
+		return !hasColor(p) ? ChatColor.WHITE
+				: colorTeams.stream()
+				.filter(t -> t.hasEntry(p.getName()))
+				.findFirst()
+				.get()
+				.getColor();
+	}
+
+	public boolean isColor(Player p, ChatColor color) {
+		return getColor(p).equals(color);
+	}
 }
