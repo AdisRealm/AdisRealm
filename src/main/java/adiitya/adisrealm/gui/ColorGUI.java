@@ -2,7 +2,7 @@ package adiitya.adisrealm.gui;
 
 import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.utils.ItemBuilder;
-import adiitya.adisrealm.utils.NameColor;
+import adiitya.adisrealm.utils.name.NameColor;
 import adiitya.adisrealm.utils.NameColorManager;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;

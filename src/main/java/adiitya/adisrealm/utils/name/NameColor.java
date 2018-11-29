@@ -1,4 +1,4 @@
-package adiitya.adisrealm.utils;
+package adiitya.adisrealm.utils.name;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

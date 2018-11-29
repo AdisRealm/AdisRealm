@@ -1,9 +1,13 @@
 package adiitya.adisrealm.utils;
 
 import adiitya.adisrealm.db.DefaultSchema;
+import adiitya.adisrealm.db.tables.records.NamesRecord;
+import adiitya.adisrealm.utils.name.NameElement;
+import adiitya.adisrealm.utils.name.PlayerName;
 import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 import org.jooq.DSLContext;
+import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -11,12 +15,13 @@ import org.jooq.impl.DSL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import static adiitya.adisrealm.db.Tables.NICKNAMES;
+import static adiitya.adisrealm.db.Tables.*;
 
 @UtilityClass
 public class DataManager {
@@ -43,8 +48,8 @@ public class DataManager {
 
 		for (Table<?> table : DefaultSchema.DEFAULT_SCHEMA.getTables())
 			ctx.createTableIfNotExists(table)
-				.columns(table.fields())
-				.execute();
+					.columns(table.fields())
+					.execute();
 	}
 
 	public List<String> getNicknames(UUID uuid) {
@@ -144,6 +149,27 @@ public class DataManager {
 		return Optional.empty();
 	}
 
+	public Optional<Result<NamesRecord>> getPlayerNames() {
+
+		if (!attemptReconnect())
+			return Optional.empty();
+
+		return Optional.of(ctx.selectFrom(NAMES).fetch());
+	}
+
+	public void setPlayerNameElement(UUID uuid, NameElement element, String value, String name) {
+
+		ctx.deleteFrom(NAMES)
+				.where(NAMES.UUID.eq(uuid.toString()))
+				.and(NAMES.ELEMENT.eq(element.name()))
+				.execute();
+
+		ctx.insertInto(NAMES)
+				.columns(NAMES.fields())
+				.values(uuid.toString(), element.name(), value, name)
+				.execute();
+	}
+
 	private boolean attemptReconnect() {
 
 		try {
@@ -155,7 +181,7 @@ public class DataManager {
 			connect(databasePath, log);
 
 			return ctx.selectOne().from("sqlite_master").fetch().isNotEmpty();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}

@@ -7,6 +7,7 @@ import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.event.*;
 import adiitya.adisrealm.utils.DataManager;
 import adiitya.adisrealm.utils.NameColorManager;
+import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
@@ -46,7 +47,7 @@ public final class AdisRealm extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		NameColorManager.createTeams();
+		NameManager.loadData();
 
 		addCommand(new NickMainCommand());
 		addCommand(new MessageCommand());

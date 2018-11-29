@@ -1,5 +1,7 @@
 package adiitya.adisrealm.utils;
 
+import adiitya.adisrealm.utils.name.NameElement;
+import adiitya.adisrealm.utils.name.NameManager;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -48,8 +50,11 @@ public final class NameColorManager {
 		createTeam(color);
 
 		try {
+
 			Team team = scoreboard.getTeam(color.name().toLowerCase());
 			team.addEntry(Bukkit.getPlayer(uuid).getName());
+
+			NameManager.setElement(uuid, NameElement.FORMATTING_PREFIX, color.toString());
 		} catch(IllegalArgumentException e) {
 			return false;
 		}

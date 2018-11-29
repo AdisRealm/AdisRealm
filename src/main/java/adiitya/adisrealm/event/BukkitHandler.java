@@ -3,6 +3,8 @@ package adiitya.adisrealm.event;
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.utils.AFKManager;
 import adiitya.adisrealm.utils.Utils;
+import adiitya.adisrealm.utils.name.NameElement;
+import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -21,7 +23,8 @@ public final class BukkitHandler implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 
-		e.setFormat("§7%s§r: %s");
+		Player p = e.getPlayer();
+		e.setFormat(NameManager.getElement(p.getUniqueId(), NameElement.FORMATTING_PREFIX) + "%s§r: %s");
 	}
 
 	@EventHandler
