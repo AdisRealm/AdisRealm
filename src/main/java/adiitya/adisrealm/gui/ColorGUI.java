@@ -2,12 +2,12 @@ package adiitya.adisrealm.gui;
 
 import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.utils.ItemBuilder;
+import adiitya.adisrealm.utils.NameColor;
 import adiitya.adisrealm.utils.NameColorManager;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import fr.minuskube.inv.content.SlotIterator;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
