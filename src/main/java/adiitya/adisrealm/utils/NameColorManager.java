@@ -13,7 +13,16 @@ import java.util.*;
 public final class NameColorManager {
 
 	private static final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-	private static final Set<Team> colorTeams = new HashSet<>();
+	private static final List<Team> colorTeams = new ArrayList<>();
+
+	public void createTeams() {
+
+		colorTeams.clear();
+
+		Arrays.stream(ChatColor.values())
+				.filter(ChatColor::isColor)
+				.forEach(NameColorManager::createTeam);
+	}
 
 	private void createTeam(ChatColor color) {
 
@@ -23,7 +32,8 @@ public final class NameColorManager {
 		String name = color.name().toLowerCase();
 
 		try {
-			Team team = scoreboard.registerNewTeam(name);
+
+			Team team = Optional.of(scoreboard.getTeam(name)).orElse(scoreboard.registerNewTeam(name));
 			team.setColor(color);
 
 			colorTeams.add(team);
@@ -48,18 +58,21 @@ public final class NameColorManager {
 	}
 
 	public boolean hasColor(Player player) {
-		return colorTeams.stream()
-				.anyMatch(t -> t.hasEntry(player.getName()));
+
+		//System.out.println(player.getName());
+		//colorTeams.forEach(t -> System.out.printf("%s: %s%n", t.getDisplayName(), t.getEntries()));
+
+		return scoreboard.getEntryTeam(player.getName()) != null;
+		//.stream().anyMatch(t -> t.hasEntry(player.getName()));
 	}
 
 	public ChatColor getColor(Player p) {
 
-		return !hasColor(p) ? ChatColor.WHITE
-				: colorTeams.stream()
+		return !hasColor(p) ? ChatColor.WHITE : scoreboard.getEntryTeam(p.getName()).getColor();/*colorTeams.stream()
 				.filter(t -> t.hasEntry(p.getName()))
-				.findFirst()
+				.findAny()
 				.get()
-				.getColor();
+				.getColor();*/
 	}
 
 	public boolean isColor(Player p, ChatColor color) {
