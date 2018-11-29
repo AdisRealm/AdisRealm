@@ -1,5 +1,6 @@
 package adiitya.adisrealm.gui;
 
+import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.utils.ItemBuilder;
 import adiitya.adisrealm.utils.NameColorManager;
 import fr.minuskube.inv.ClickableItem;
@@ -7,6 +8,7 @@ import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -65,7 +67,7 @@ public final class ColorGUI {
 			if (NameColorManager.isColor(p, color.color))
 				b.addEnchant(Enchantment.DURABILITY, 1);
 
-			return ClickableItem.of(b.build(), e -> NameColorManager.setColor(p.getUniqueId(), color.color));
+			return ClickableItem.of(b.build(), e -> Bukkit.getScheduler().runTaskAsynchronously(AdisRealm.getInstance(), () -> NameColorManager.setColor(p.getUniqueId(), color.color)));
 		}
 
 		@Override
