@@ -1,6 +1,6 @@
 package adiitya.adisrealm.gui;
 
-import adiitya.adisrealm.utils.MetaMutator;
+import adiitya.adisrealm.utils.ItemBuilder;
 import adiitya.adisrealm.utils.NameColorManager;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
@@ -12,12 +12,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Collections;
 
 @UtilityClass
 public final class ColorGUI {
+
+	public static final ItemStack BACK_ITEM = new ItemBuilder(Material.ARROW).setName("Go back").build();
 
 	public void show(Player p) {
 		get().open(p);
@@ -51,31 +50,22 @@ public final class ColorGUI {
 			}
 
 			contents.set(4, 4, getItem(player, NameColor.WHITE));
-			contents.set(5, 0, ClickableItem.of(getBackItem(), e -> contents.inventory().getParent().get().open(player)));
-		}
 
-		private ItemStack getBackItem() {
-
-			ItemStack stack = new ItemStack(Material.ARROW, 1);
-			MetaMutator.mutate(stack, meta -> meta.setDisplayName("Go back"));
-
-			return stack;
+			contents.inventory().getParent()
+					.ifPresent(inv -> contents.set(5, 0, ClickableItem.of(BACK_ITEM, e -> inv.open(player))));
 		}
 
 		private ClickableItem getItem(Player p, NameColor color) {
 
-			ItemStack stack = new ItemStack(color.mat, 1);
+			ItemBuilder b = new ItemBuilder(color.mat)
+					.addFlags(ItemFlag.HIDE_ENCHANTS)
+					.setName(color.getName())
+					.addLore(String.format("%s%s", color.color.toString(), p.getName()));
 
 			if (NameColorManager.isColor(p, color.color))
-				stack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+				b.addEnchant(Enchantment.DURABILITY, 1);
 
-			MetaMutator.mutate(stack, meta -> {
-				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-				meta.setDisplayName(color.getName());
-				meta.setLore(Collections.singletonList(String.format("%s%s", color.color.toString(), p.getName())));
-			});
-
-			return ClickableItem.of(stack, e -> NameColorManager.setColor(p.getUniqueId(), color.color));
+			return ClickableItem.of(b.build(), e -> NameColorManager.setColor(p.getUniqueId(), color.color));
 		}
 
 		@Override

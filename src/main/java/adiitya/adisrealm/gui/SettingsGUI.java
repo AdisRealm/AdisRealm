@@ -1,6 +1,6 @@
 package adiitya.adisrealm.gui;
 
-import adiitya.adisrealm.utils.MetaMutator;
+import adiitya.adisrealm.utils.ItemBuilder;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 @UtilityClass
 public final class SettingsGUI {
@@ -35,9 +34,7 @@ public final class SettingsGUI {
 		@Override
 		public void init(Player player, InventoryContents contents) {
 
-			ItemStack stack = new ItemStack(Material.NAME_TAG);
-			MetaMutator.mutate(stack, meta -> meta.setDisplayName("Name color"));
-
+			ItemStack stack = new ItemBuilder(Material.NAME_TAG).setName("Change name color").build();
 			ClickableItem color = ClickableItem.of(stack, e -> ColorGUI.show(player));
 			contents.add(color);
 		}
