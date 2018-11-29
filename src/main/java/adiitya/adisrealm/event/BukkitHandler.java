@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import static adiitya.adisrealm.utils.name.NameElement.FORMATTING_PREFIX;
 import static org.bukkit.entity.EntityType.ENDERMAN;
 
 public final class BukkitHandler implements Listener {
@@ -24,14 +25,16 @@ public final class BukkitHandler implements Listener {
 	public void onChat(AsyncPlayerChatEvent e) {
 
 		Player p = e.getPlayer();
-		e.setFormat(NameManager.getElement(p.getUniqueId(), NameElement.FORMATTING_PREFIX) + "%s§r: %s");
+		String prefix = NameManager.getElement(p.getUniqueId(), FORMATTING_PREFIX);
+		e.setFormat(prefix + "%s§r: %s");
 	}
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 
 		Player p = e.getPlayer();
-		e.setJoinMessage(String.format("§a+§r%s", p.getDisplayName()));
+		String name = NameManager.getName(p.getUniqueId(), FORMATTING_PREFIX);
+		e.setJoinMessage(String.format("§a+§r%s", name));
 
 		DiscordBot.onJoin();
 		DiscordBot.updateInfoMessage(false);
@@ -41,7 +44,8 @@ public final class BukkitHandler implements Listener {
 	public void onLeave(PlayerQuitEvent e) {
 
 		Player p = e.getPlayer();
-		e.setQuitMessage(String.format("§c-§r%s", p.getDisplayName()));
+		String name = NameManager.getName(p.getUniqueId(), FORMATTING_PREFIX);
+		e.setQuitMessage(String.format("§c-§r%s", name));
 
 		DiscordBot.onLeave();
 		DiscordBot.updateInfoMessage(false);
@@ -69,7 +73,8 @@ public final class BukkitHandler implements Listener {
 
 		if (broadcast && AFKManager.isAFK(player.getUniqueId())) {
 
-			String message = "§6§l[§c§l-§6§l]§f" + player.getDisplayName();
+			String name = NameManager.getName(player.getUniqueId(), FORMATTING_PREFIX);
+			String message = "§6§l[§c§l-§6§l]§f" + name;
 			Bukkit.getConsoleSender().sendMessage(message);
 
 			for (Player p : Bukkit.getOnlinePlayers())
