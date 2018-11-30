@@ -1,5 +1,7 @@
 package adiitya.adisrealm.utils;
 
+import adiitya.adisrealm.utils.name.NameElement;
+import adiitya.adisrealm.utils.name.NameManager;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,7 +21,7 @@ public class AFKManager {
 		afkReasons.put(uuid, r);
 
 		Player player = Bukkit.getPlayer(uuid);
-		player.setPlayerListName("§6[§lAFK§r§6]" + player.getDisplayName());
+		player.setPlayerListName(NameManager.getName(uuid, NameElement.FORMATTING_PREFIX, NameElement.AFK_PREFIX));
 	}
 
 	public Optional<String> getReason(UUID uuid) {
@@ -29,7 +31,8 @@ public class AFKManager {
 	public void exitAFK(UUID uuid) {
 
 		Player player = Bukkit.getPlayer(uuid);
-		player.setPlayerListName(player.getDisplayName());
+		String name = NameManager.getName(uuid, NameElement.FORMATTING_PREFIX);
+		player.setPlayerListName(name);
 
 		afkReasons.remove(uuid);
 	}

@@ -3,7 +3,6 @@ package adiitya.adisrealm.event;
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.utils.AFKManager;
 import adiitya.adisrealm.utils.Utils;
-import adiitya.adisrealm.utils.name.NameElement;
 import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;

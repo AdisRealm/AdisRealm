@@ -5,6 +5,8 @@ import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletions;
 import adiitya.adisrealm.utils.MessageManager;
 import adiitya.adisrealm.utils.Utils;
+import adiitya.adisrealm.utils.name.NameElement;
+import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -52,7 +54,7 @@ public final class MessageCommand extends SingleCommand {
 		list.remove(0);
 
 		if (!targetPlayer.isOnline())
-			sender.sendMessage(targetPlayer.getName() + "§9 is offline");
+			sender.sendMessage(NameManager.getName(target, NameElement.FORMATTING_PREFIX) + "§9 is offline");
 		else {
 
 			String message = String.join(" ", list);

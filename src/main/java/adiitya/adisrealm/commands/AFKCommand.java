@@ -2,6 +2,8 @@ package adiitya.adisrealm.commands;
 
 import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.utils.AFKManager;
+import adiitya.adisrealm.utils.name.NameElement;
+import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,8 +35,9 @@ public final class AFKCommand extends SingleCommand {
 
 		if (!isAFK) {
 
-			String message = reason.isEmpty() ? "§6§l[§a§l+§6§l]§f" + player.getDisplayName()
-					: "§6§l[§a§l+§6§l]§f" + player.getDisplayName() + ": §6§l" + reason;
+			String name = NameManager.getName(player.getUniqueId(), NameElement.FORMATTING_PREFIX);
+			String message = reason.isEmpty() ? "§6§l[§a§l+§6§l]§f" + name
+					: "§6§l[§a§l+§6§l]§f" + name + ": §6§l" + reason;
 
 			Bukkit.getConsoleSender().sendMessage(message);
 			Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(message));

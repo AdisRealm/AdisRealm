@@ -9,7 +9,7 @@ public final class PlayerName {
 
 	@Getter
 	private final String playerName;
-	final Map<NameElement, String> elements = new HashMap<>();
+	final Map<NameElement, String> elements = new EnumMap<>(NameElement.class);
 
 	public PlayerName(String playerName) {
 		this.playerName = playerName;
@@ -19,6 +19,7 @@ public final class PlayerName {
 	public String getName(NameElement... elements) {
 
 		List<String> prefix = Arrays.stream(elements)
+				.sorted(Comparator.comparingInt(e -> e.z))
 				.map(this::getElement)
 				.collect(Collectors.toList());
 
