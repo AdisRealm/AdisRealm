@@ -47,8 +47,11 @@ public final class TabCompleter {
 
 	public List<String> get(List<String> args) {
 
+		if (args.isEmpty())
+			return new ArrayList<>();
+
 		List<String> results = new ArrayList<>();
-		String search = args.isEmpty() ? args.get(args.size() - 1) : "";
+		String search = args.get(args.size() - 1);
 
 		completionMap.getOrDefault(args.size(), new ArrayList<>())
 				.stream()

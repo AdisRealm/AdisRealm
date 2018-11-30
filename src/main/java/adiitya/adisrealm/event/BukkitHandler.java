@@ -32,7 +32,7 @@ public final class BukkitHandler implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 
 		Player p = e.getPlayer();
-		String name = NameManager.getName(p.getUniqueId(), FORMATTING_PREFIX);
+		String name = NameManager.getFormattedName(p.getUniqueId());
 		e.setJoinMessage(String.format("§a+§r%s", name));
 
 		DiscordBot.onJoin();

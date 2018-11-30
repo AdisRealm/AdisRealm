@@ -5,7 +5,7 @@ public enum NameElement {
 	AFK_PREFIX(0),
 	FORMATTING_PREFIX(1);
 
-	int z;
+	final int z;
 
 	NameElement(int z) {
 		this.z = z;

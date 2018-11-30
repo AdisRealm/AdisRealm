@@ -1,14 +1,13 @@
 package adiitya.adisrealm.commands;
 
 import adiitya.adisrealm.command.SingleCommand;
+import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.utils.AFKManager;
-import adiitya.adisrealm.utils.name.NameElement;
 import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class AFKCommand extends SingleCommand {
@@ -35,9 +34,8 @@ public final class AFKCommand extends SingleCommand {
 
 		if (!isAFK) {
 
-			String name = NameManager.getName(player.getUniqueId(), NameElement.FORMATTING_PREFIX);
-			String message = reason.isEmpty() ? "§6§l[§a§l+§6§l]§f" + name
-					: "§6§l[§a§l+§6§l]§f" + name + ": §6§l" + reason;
+			String name = NameManager.getFormattedName(player.getUniqueId());
+			String message = "§6§l[§a§l+§6§l]§f" + name + (reason.isEmpty() ? "" : ": §6§l" + reason);
 
 			Bukkit.getConsoleSender().sendMessage(message);
 			Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage(message));
@@ -48,6 +46,6 @@ public final class AFKCommand extends SingleCommand {
 
 	@Override
 	public List<String> tabComplete(CommandSender sender, List<String> args) {
-		return new ArrayList<>();
+		return TabCompleter.empty();
 	}
 }

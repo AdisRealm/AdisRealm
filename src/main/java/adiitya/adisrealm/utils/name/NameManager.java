@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static adiitya.adisrealm.utils.name.NameElement.*;
+
 @UtilityClass
 public class NameManager {
 
@@ -27,7 +29,7 @@ public class NameManager {
 			for (NamesRecord rec : res) {
 
 				UUID uuid = UUID.fromString(rec.getUuid());
-				NameElement element = NameElement.valueOf(rec.getElement());
+				NameElement element = valueOf(rec.getElement());
 				String value = rec.getValue();
 				String name = rec.getName();
 
@@ -75,5 +77,13 @@ public class NameManager {
 
 	public String getElement(UUID uuid, NameElement element) {
 		return names.getOrDefault(uuid, new PlayerName("")).getElement(element);
+	}
+
+	public String getFormattedName(UUID uuid) {
+		return getName(uuid, FORMATTING_PREFIX);
+	}
+
+	public String getAFKTabName(UUID uuid) {
+		return getName(uuid, AFK_PREFIX, FORMATTING_PREFIX);
 	}
 }

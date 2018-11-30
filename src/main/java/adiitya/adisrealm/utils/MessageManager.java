@@ -26,7 +26,7 @@ public final class MessageManager {
 		messagePairs.put(sender.getUniqueId(), target.getUniqueId());
 		messagePairs.put(target.getUniqueId(), sender.getUniqueId());
 
-		String targetName = getName(target.getUniqueId(), FORMATTING_PREFIX);
+		String targetName = getFormattedName(target.getUniqueId());
 
 		if (AFKManager.isAFK(target.getUniqueId()))
 			sender.sendMessage(targetName + "§9 is currently AFK:§6§l " + AFKManager.getReason(target.getUniqueId()).orElse("No reason"));
@@ -36,12 +36,12 @@ public final class MessageManager {
 	}
 
 	private String getOutMessage(Player sender, Player target, String message) {
-		String targetName = getName(target.getUniqueId(), FORMATTING_PREFIX);
+		String targetName = getFormattedName(target.getUniqueId());
 		return String.format(MESSAGE, getElement(sender.getUniqueId(), FORMATTING_PREFIX) + "Me", targetName, message);
 	}
 
 	private String getInMessage(Player target, Player sender, String message) {
-		String senderName = getName(sender.getUniqueId(), FORMATTING_PREFIX);
+		String senderName = getFormattedName(sender.getUniqueId());
 		return String.format(MESSAGE, senderName, getElement(target.getUniqueId(), FORMATTING_PREFIX) + "Me", message);
 	}
 

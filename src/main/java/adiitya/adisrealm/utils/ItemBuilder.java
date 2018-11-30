@@ -8,11 +8,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class ItemBuilder {
 
-	private ItemStack stack;
+	private final ItemStack stack;
 	private List<String> lore = new ArrayList<>();
 
 	public ItemBuilder(Material material) {
