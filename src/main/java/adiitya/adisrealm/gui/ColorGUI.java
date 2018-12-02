@@ -21,7 +21,8 @@ import org.bukkit.inventory.ItemStack;
 @UtilityClass
 public final class ColorGUI {
 
-	public static final ItemStack BACK_ITEM = new ItemBuilder(Material.ARROW).setName("Go back").build();
+	private static final ItemStack BACK_ITEM = new ItemBuilder(Material.ARROW).setName("Go back").build();
+	private static final ItemStack SEPARATOR = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build();
 
 	public void show(Player p) {
 		get().open(p);
@@ -45,7 +46,7 @@ public final class ColorGUI {
 
 			for (int i = 0; i < NameColor.values().length - 1; i++) {
 
-				int y = (i / 5) + 1;
+				int y = i / 5;
 				int x = (i % 5) + 2;
 
 				NameColor color = NameColor.values()[i];
@@ -54,10 +55,12 @@ public final class ColorGUI {
 
 			}
 
-			contents.set(4, 4, getItem(player, NameColor.WHITE));
+			contents.set(3, 4, getItem(player, NameColor.WHITE));
 
 			contents.inventory().getParent()
-					.ifPresent(inv -> contents.set(5, 0, ClickableItem.of(BACK_ITEM, e -> inv.open(player))));
+					.ifPresent(inv -> contents.set(5, 4, ClickableItem.of(BACK_ITEM, e -> inv.open(player))));
+
+			contents.fillRow(4, ClickableItem.of(SEPARATOR, e -> {}));
 		}
 
 		private void onClickColor(Player p, NameColor color, Inventory inv) {
