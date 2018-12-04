@@ -2,8 +2,9 @@ package adiitya.adisrealm.event;
 
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.utils.AFKManager;
+import adiitya.adisrealm.NameColorManager;
 import adiitya.adisrealm.utils.Utils;
-import adiitya.adisrealm.utils.name.NameManager;
+import adiitya.adisrealm.utils.name.PlayerName;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -15,7 +16,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import static adiitya.adisrealm.utils.name.NameElement.FORMATTING_PREFIX;
 import static org.bukkit.entity.EntityType.ENDERMAN;
 
 public final class BukkitHandler implements Listener {
@@ -24,7 +24,7 @@ public final class BukkitHandler implements Listener {
 	public void onChat(AsyncPlayerChatEvent e) {
 
 		Player p = e.getPlayer();
-		String prefix = NameManager.getElement(p.getUniqueId(), FORMATTING_PREFIX);
+		String prefix = NameColorManager.getColor(p.getName()).toString();
 		e.setFormat(prefix + "%s§r: %s");
 	}
 
@@ -32,7 +32,7 @@ public final class BukkitHandler implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 
 		Player p = e.getPlayer();
-		String name = NameManager.getFormattedName(p.getUniqueId());
+		String name = NameColorManager.getColor(p.getName()).toString();
 		e.setJoinMessage(String.format("§a+§r%s", name));
 
 		DiscordBot.onJoin();
@@ -43,7 +43,7 @@ public final class BukkitHandler implements Listener {
 	public void onLeave(PlayerQuitEvent e) {
 
 		Player p = e.getPlayer();
-		String name = NameManager.getName(p.getUniqueId(), FORMATTING_PREFIX);
+		String name = NameColorManager.getColor(p.getName()).toString();
 		e.setQuitMessage(String.format("§c-§r%s", name));
 
 		DiscordBot.onLeave();
@@ -72,7 +72,7 @@ public final class BukkitHandler implements Listener {
 
 		if (broadcast && AFKManager.isAFK(player.getUniqueId())) {
 
-			String name = NameManager.getName(player.getUniqueId(), FORMATTING_PREFIX);
+			String name = PlayerName.FORMATTED.build(player.getName()).getName();
 			String message = "§6§l[§c§l-§6§l]§f" + name;
 			Bukkit.getConsoleSender().sendMessage(message);
 

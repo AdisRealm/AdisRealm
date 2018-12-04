@@ -1,7 +1,6 @@
 package adiitya.adisrealm.utils;
 
-import adiitya.adisrealm.utils.name.NameElement;
-import adiitya.adisrealm.utils.name.NameManager;
+import adiitya.adisrealm.utils.name.PlayerName;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -9,6 +8,8 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
+
+import static adiitya.adisrealm.NameColorManager.*;
 
 @UtilityClass
 public class AFKManager {
@@ -21,7 +22,7 @@ public class AFKManager {
 		afkReasons.put(uuid, r);
 
 		Player player = Bukkit.getPlayer(uuid);
-		player.setPlayerListName(NameManager.getName(uuid, NameElement.FORMATTING_PREFIX, NameElement.AFK_PREFIX));
+		player.setPlayerListName(PlayerName.AFK_TAB.build(player.getName()).getName());
 	}
 
 	public Optional<String> getReason(UUID uuid) {
@@ -31,7 +32,7 @@ public class AFKManager {
 	public void exitAFK(UUID uuid) {
 
 		Player player = Bukkit.getPlayer(uuid);
-		String name = NameManager.getName(uuid, NameElement.FORMATTING_PREFIX);
+		String name = getColoredName(player.getName());
 		player.setPlayerListName(name);
 
 		afkReasons.remove(uuid);

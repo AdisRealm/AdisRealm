@@ -5,13 +5,14 @@ import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletions;
 import adiitya.adisrealm.utils.MessageManager;
 import adiitya.adisrealm.utils.Utils;
-import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
+
+import static adiitya.adisrealm.NameColorManager.*;
 
 public final class MessageCommand extends SingleCommand {
 
@@ -53,7 +54,7 @@ public final class MessageCommand extends SingleCommand {
 		list.remove(0);
 
 		if (!targetPlayer.isOnline())
-			sender.sendMessage(NameManager.getFormattedName(target) + "§9 is offline");
+			sender.sendMessage(getColoredName(targetPlayer.getName()) + "§9 is offline");
 		else {
 
 			String message = String.join(" ", list);

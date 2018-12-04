@@ -3,12 +3,13 @@ package adiitya.adisrealm.commands;
 import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.utils.AFKManager;
-import adiitya.adisrealm.utils.name.NameManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+
+import static adiitya.adisrealm.NameColorManager.getColoredName;
 
 public final class AFKCommand extends SingleCommand {
 
@@ -34,7 +35,7 @@ public final class AFKCommand extends SingleCommand {
 
 		if (!isAFK) {
 
-			String name = NameManager.getFormattedName(player.getUniqueId());
+			String name = getColoredName(player.getName());
 			String message = "§6§l[§a§l+§6§l]§f" + name + (reason.isEmpty() ? "" : ": §6§l" + reason);
 
 			Bukkit.getConsoleSender().sendMessage(message);

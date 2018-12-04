@@ -7,30 +7,43 @@ import java.util.stream.Collectors;
 
 public final class PlayerName {
 
+	public static NameBuilder AFK_TAB = PlayerName.builder().addAFKTag().addFormatting();
+	public static NameBuilder FORMATTED = PlayerName.builder().addFormatting();
+
 	@Getter
-	private final String playerName;
-	final Map<NameElement, String> elements = new EnumMap<>(NameElement.class);
+	private final String name;
 
-	public PlayerName(String playerName) {
-		this.playerName = playerName;
-		setElement(NameElement.AFK_PREFIX, "§6[§lAFK§r§6]");
+	private PlayerName(String name) {
+		this.name = name;
 	}
 
-	public String getName(NameElement... elements) {
-
-		List<String> prefix = Arrays.stream(elements)
-				.sorted(Comparator.comparingInt(e -> e.z))
-				.map(this::getElement)
-				.collect(Collectors.toList());
-
-		return String.format("%s%s", String.join("", prefix), playerName);
+	public static NameBuilder builder() {
+		return new NameBuilder();
 	}
 
-	public String getElement(NameElement element) {
-		return elements.getOrDefault(element, "");
-	}
+	public static final class NameBuilder {
 
-	public void setElement(NameElement element, String value) {
-		elements.put(element, value);
+		private List<NameElement> prefix = new ArrayList<>();
+
+		private NameBuilder() {}
+
+		public NameBuilder addAFKTag() {
+			prefix.add(NameElement.AFK_PREFIX);
+			return this;
+		}
+
+		public NameBuilder addFormatting() {
+			prefix.add(NameElement.FORMATTING_PREFIX);
+			return this;
+		}
+
+		public PlayerName build(String name) {
+
+			String before = prefix.stream()
+					.map(e -> e.get(name))
+					.collect(Collectors.joining());
+
+			return new PlayerName(String.format("%s%s", before, name));
+		}
 	}
 }

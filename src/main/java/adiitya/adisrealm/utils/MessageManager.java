@@ -1,5 +1,7 @@
 package adiitya.adisrealm.utils;
 
+import adiitya.adisrealm.NameColorManager;
+import adiitya.adisrealm.utils.name.PlayerName;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 
@@ -7,9 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
-import static adiitya.adisrealm.utils.name.NameElement.*;
-import static adiitya.adisrealm.utils.name.NameManager.*;
 
 @UtilityClass
 public final class MessageManager {
@@ -26,7 +25,7 @@ public final class MessageManager {
 		messagePairs.put(sender.getUniqueId(), target.getUniqueId());
 		messagePairs.put(target.getUniqueId(), sender.getUniqueId());
 
-		String targetName = getFormattedName(target.getUniqueId());
+		String targetName = PlayerName.FORMATTED.build(target.getName()).getName();
 
 		if (AFKManager.isAFK(target.getUniqueId()))
 			sender.sendMessage(targetName + "§9 is currently AFK:§6§l " + AFKManager.getReason(target.getUniqueId()).orElse("No reason"));
@@ -36,13 +35,13 @@ public final class MessageManager {
 	}
 
 	private String getOutMessage(Player sender, Player target, String message) {
-		String targetName = getFormattedName(target.getUniqueId());
-		return String.format(MESSAGE, getElement(sender.getUniqueId(), FORMATTING_PREFIX) + "Me", targetName, message);
+		String targetName = PlayerName.FORMATTED.build(target.getName()).getName();
+		return String.format(MESSAGE, NameColorManager.getColor(sender.getName()).toString() + "Me", targetName, message);
 	}
 
 	private String getInMessage(Player target, Player sender, String message) {
-		String senderName = getFormattedName(sender.getUniqueId());
-		return String.format(MESSAGE, senderName, getElement(target.getUniqueId(), FORMATTING_PREFIX) + "Me", message);
+		String senderName = PlayerName.FORMATTED.build(sender.getName()).getName();
+		return String.format(MESSAGE, senderName, NameColorManager.getColor(target.getName()).toString() + "Me", message);
 	}
 
 	public Optional<UUID> getLastRecipient(UUID uuid) {

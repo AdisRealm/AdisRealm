@@ -1,5 +1,5 @@
 name: AdisRealm
-version: 0.2
+version: 0.3
 main: adiitya.adisrealm.AdisRealm
 load: STARTUP
 depend: [SmartInvs]

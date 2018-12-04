@@ -2,8 +2,7 @@ package adiitya.adisrealm.gui;
 
 import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.utils.ItemBuilder;
-import adiitya.adisrealm.utils.name.NameColor;
-import adiitya.adisrealm.utils.NameColorManager;
+import adiitya.adisrealm.NameColorManager;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -17,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 @UtilityClass
 public final class ColorGUI {
@@ -65,7 +66,7 @@ public final class ColorGUI {
 
 		private void onClickColor(Player p, NameColor color, Inventory inv) {
 
-			NameColorManager.setColor(p.getUniqueId(), color.color);
+			NameColorManager.setColor(p.getName(), color.color);
 
 			for (int i = 0; i < 45; i++) {
 
@@ -76,7 +77,7 @@ public final class ColorGUI {
 				NameColor c = NameColor.fromMaterial(mat);
 				ItemBuilder b = new ItemBuilder(inv.getItem(i)).clearEnchants();
 
-				if (NameColorManager.isColor(p, c.color))
+				if (NameColorManager.isColor(p.getName(), c.color))
 					b.addEnchant(Enchantment.DURABILITY, 1);
 
 				inv.setItem(i, b.build());
@@ -90,7 +91,7 @@ public final class ColorGUI {
 					.setName(ChatColor.RESET + color.getName())
 					.addLore(String.format("%s%s", color.color, p.getName()));
 
-			if (NameColorManager.isColor(p, color.color))
+			if (NameColorManager.isColor(p.getName(), color.color))
 				b.addEnchant(Enchantment.DURABILITY, 1);
 
 			return ClickableItem.of(b.build(), e ->
@@ -100,5 +101,52 @@ public final class ColorGUI {
 
 		@Override
 		public void update(Player player, InventoryContents contents) {}
+	}
+
+	public enum NameColor {
+
+		BLACK(ChatColor.BLACK, Material.INK_SAC),
+		DARK_BLUE(ChatColor.DARK_BLUE, Material.LAPIS_LAZULI),
+		DARK_GREEN(ChatColor.DARK_GREEN, Material.CACTUS_GREEN),
+		DARK_AQUA(ChatColor.DARK_AQUA, Material.CYAN_DYE),
+		DARK_RED(ChatColor.DARK_RED, Material.REDSTONE),
+		DARK_PURPLE(ChatColor.DARK_PURPLE, Material.PURPLE_DYE),
+		GOLD(ChatColor.GOLD, Material.ORANGE_DYE),
+		GRAY(ChatColor.GRAY, Material.LIGHT_GRAY_DYE),
+		DARK_GRAY(ChatColor.DARK_GRAY, Material.GRAY_DYE),
+		BLUE(ChatColor.BLUE, Material.LIGHT_BLUE_DYE),
+		GREEN(ChatColor.GREEN, Material.LIME_DYE),
+		AQUA(ChatColor.AQUA, Material.DIAMOND),
+		RED(ChatColor.RED, Material.ROSE_RED),
+		LIGHT_PURPLE(ChatColor.LIGHT_PURPLE, Material.MAGENTA_DYE),
+		YELLOW(ChatColor.YELLOW, Material.DANDELION_YELLOW),
+		WHITE(ChatColor.WHITE, Material.BONE_MEAL);
+
+		public final ChatColor color;
+		public final Material mat;
+
+		NameColor(ChatColor color, Material mat) {
+			this.color = color;
+			this.mat = mat;
+		}
+
+		public static NameColor fromMaterial(Material material) {
+			return Arrays.stream(NameColor.values())
+					.filter(n -> n.mat.equals(material))
+					.findAny()
+					.orElse(NameColor.WHITE);
+		}
+
+		public String getName() {
+
+			String name = color.name().toLowerCase().substring(1);
+			name = color.name().substring(0, 1) + name;
+
+			return name.replace("_", " ");
+		}
+
+		public String getFormattedName() {
+			return color.toString() + getName();
+		}
 	}
 }
