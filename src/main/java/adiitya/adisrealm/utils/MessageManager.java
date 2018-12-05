@@ -1,7 +1,5 @@
 package adiitya.adisrealm.utils;
 
-import adiitya.adisrealm.NameColorManager;
-import adiitya.adisrealm.utils.name.PlayerName;
 import lombok.experimental.UtilityClass;
 import org.bukkit.entity.Player;
 
@@ -25,23 +23,23 @@ public final class MessageManager {
 		messagePairs.put(sender.getUniqueId(), target.getUniqueId());
 		messagePairs.put(target.getUniqueId(), sender.getUniqueId());
 
-		String targetName = PlayerName.FORMATTED.build(target.getName()).getName();
+		String targetName = NameManager.getColoredName(target.getName());
 
-		if (AFKManager.isAFK(target.getUniqueId()))
-			sender.sendMessage(targetName + "§9 is currently AFK:§6§l " + AFKManager.getReason(target.getUniqueId()).orElse("No reason"));
+		if (AFKManager.isAFK(target))
+			sender.sendMessage(targetName + "§9 is currently AFK:§6§l " + AFKManager.getReason(target).orElse("No reason"));
 
 		sender.sendMessage(getOutMessage(sender, target, message));
 		target.sendMessage(getInMessage(target, sender, message));
 	}
 
 	private String getOutMessage(Player sender, Player target, String message) {
-		String targetName = PlayerName.FORMATTED.build(target.getName()).getName();
-		return String.format(MESSAGE, NameColorManager.getColor(sender.getName()).toString() + "Me", targetName, message);
+		String targetName = NameManager.getColoredName(target.getName());
+		return String.format(MESSAGE, NameManager.getColor(sender.getName()) + "Me", targetName, message);
 	}
 
 	private String getInMessage(Player target, Player sender, String message) {
-		String senderName = PlayerName.FORMATTED.build(sender.getName()).getName();
-		return String.format(MESSAGE, senderName, NameColorManager.getColor(target.getName()).toString() + "Me", message);
+		String senderName = NameManager.getColoredName(sender.getName());
+		return String.format(MESSAGE, senderName, NameManager.getColor(target.getName()) + "Me", message);
 	}
 
 	public Optional<UUID> getLastRecipient(UUID uuid) {

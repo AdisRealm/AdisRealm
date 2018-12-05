@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-import static adiitya.adisrealm.NameColorManager.*;
+import static adiitya.adisrealm.utils.NameManager.*;
 
 public final class MessageCommand extends SingleCommand {
 

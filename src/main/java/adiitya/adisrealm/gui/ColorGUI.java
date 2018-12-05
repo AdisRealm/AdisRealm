@@ -2,7 +2,7 @@ package adiitya.adisrealm.gui;
 
 import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.utils.ItemBuilder;
-import adiitya.adisrealm.NameColorManager;
+import adiitya.adisrealm.utils.NameManager;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
@@ -66,7 +66,7 @@ public final class ColorGUI {
 
 		private void onClickColor(Player p, NameColor color, Inventory inv) {
 
-			NameColorManager.setColor(p.getName(), color.color);
+			NameManager.setColor(p.getName(), color.color);
 
 			for (int i = 0; i < 45; i++) {
 
@@ -77,7 +77,7 @@ public final class ColorGUI {
 				NameColor c = NameColor.fromMaterial(mat);
 				ItemBuilder b = new ItemBuilder(inv.getItem(i)).clearEnchants();
 
-				if (NameColorManager.isColor(p.getName(), c.color))
+				if (NameManager.isColor(p.getName(), c.color))
 					b.addEnchant(Enchantment.DURABILITY, 1);
 
 				inv.setItem(i, b.build());
@@ -91,7 +91,7 @@ public final class ColorGUI {
 					.setName(ChatColor.RESET + color.getName())
 					.addLore(String.format("%s%s", color.color, p.getName()));
 
-			if (NameColorManager.isColor(p.getName(), color.color))
+			if (NameManager.isColor(p.getName(), color.color))
 				b.addEnchant(Enchantment.DURABILITY, 1);
 
 			return ClickableItem.of(b.build(), e ->

@@ -14,7 +14,6 @@ public class NickRemoveCommand extends SubCommand {
 		super("remove", "<nick>", i -> i > 0, parent);
 	}
 
-	@SuppressWarnings("Duplicates")
 	@Override
 	public void execute(CommandSender sender, List<String> args) {
 

@@ -2,29 +2,28 @@ package adiitya.adisrealm.event;
 
 import adiitya.adisrealm.discord.DiscordBot;
 import adiitya.adisrealm.utils.AFKManager;
-import adiitya.adisrealm.NameColorManager;
+import adiitya.adisrealm.utils.NameManager;
 import adiitya.adisrealm.utils.Utils;
-import adiitya.adisrealm.utils.name.PlayerName;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 import static org.bukkit.entity.EntityType.ENDERMAN;
 
 public final class BukkitHandler implements Listener {
 
+	private static final String JOIN_PREFIX = "§a+§r";
+	private static final String LEAVE_PREFIX = "§c-§r";
+
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 
 		Player p = e.getPlayer();
-		String prefix = NameColorManager.getColor(p.getName()).toString();
+		String prefix = NameManager.getColor(p.getName()).toString();
 		e.setFormat(prefix + "%s§r: %s");
 	}
 
@@ -32,8 +31,8 @@ public final class BukkitHandler implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 
 		Player p = e.getPlayer();
-		String name = NameColorManager.getColor(p.getName()).toString();
-		e.setJoinMessage(String.format("§a+§r%s", name));
+		String name = NameManager.getColoredName(p.getName());
+		e.setJoinMessage(JOIN_PREFIX + name);
 
 		DiscordBot.onJoin();
 		DiscordBot.updateInfoMessage(false);
@@ -43,13 +42,13 @@ public final class BukkitHandler implements Listener {
 	public void onLeave(PlayerQuitEvent e) {
 
 		Player p = e.getPlayer();
-		String name = NameColorManager.getColor(p.getName()).toString();
-		e.setQuitMessage(String.format("§c-§r%s", name));
+		String name = NameManager.getColoredName(p.getName());
+		e.setQuitMessage(LEAVE_PREFIX + name);
 
 		DiscordBot.onLeave();
 		DiscordBot.updateInfoMessage(false);
 
-		exitAFK(e.getPlayer(), false);
+		AFKManager.exitAFK(p);
 	}
 
 	@EventHandler
@@ -65,21 +64,6 @@ public final class BukkitHandler implements Listener {
 	public void onMove(PlayerMoveEvent e) {
 
 		if (Utils.isMoved(e.getTo(), e.getFrom(), 0))
-			exitAFK(e.getPlayer(), true);
-	}
-
-	private void exitAFK(Player player, boolean broadcast) {
-
-		if (broadcast && AFKManager.isAFK(player.getUniqueId())) {
-
-			String name = PlayerName.FORMATTED.build(player.getName()).getName();
-			String message = "§6§l[§c§l-§6§l]§f" + name;
-			Bukkit.getConsoleSender().sendMessage(message);
-
-			for (Player p : Bukkit.getOnlinePlayers())
-				p.sendMessage(message);
-		}
-
-		AFKManager.exitAFK(player.getUniqueId());
+			AFKManager.exitAFK(e.getPlayer());
 	}
 }

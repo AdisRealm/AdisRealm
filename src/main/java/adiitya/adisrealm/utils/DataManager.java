@@ -1,12 +1,9 @@
 package adiitya.adisrealm.utils;
 
 import adiitya.adisrealm.db.DefaultSchema;
-import adiitya.adisrealm.db.tables.records.NamesRecord;
-import adiitya.adisrealm.utils.name.NameElement;
 import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 import org.jooq.DSLContext;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
 import org.jooq.impl.DSL;
@@ -145,27 +142,6 @@ public class DataManager {
 			return Optional.of(UUID.fromString(uuid));
 
 		return Optional.empty();
-	}
-
-	public Optional<Result<NamesRecord>> getPlayerNames() {
-
-		if (!attemptReconnect())
-			return Optional.empty();
-
-		return Optional.of(ctx.selectFrom(NAMES).fetch());
-	}
-
-	public void setPlayerNameElement(UUID uuid, NameElement element, String value, String name) {
-
-		ctx.deleteFrom(NAMES)
-				.where(NAMES.UUID.eq(uuid.toString()))
-				.and(NAMES.ELEMENT.eq(element.name()))
-				.execute();
-
-		ctx.insertInto(NAMES)
-				.columns(NAMES.fields())
-				.values(uuid.toString(), element.name(), value, name)
-				.execute();
 	}
 
 	private boolean attemptReconnect() {

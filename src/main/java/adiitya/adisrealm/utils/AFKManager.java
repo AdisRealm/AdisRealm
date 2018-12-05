@@ -1,44 +1,86 @@
 package adiitya.adisrealm.utils;
 
-import adiitya.adisrealm.utils.name.PlayerName;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.UUID;
-
-import static adiitya.adisrealm.NameColorManager.*;
+import java.util.function.BiPredicate;
 
 @UtilityClass
 public class AFKManager {
 
-	private static final HashMap<UUID, Optional<String>> afkReasons = new HashMap<>();
+	private static final BiPredicate<Player, AFKType> ENTER_PREDICATE = (p, type) -> type.equals(AFKType.ENTER) && !isAFK(p);
+	private static final BiPredicate<Player, AFKType> EXIT_PREDICATE = (p, type) -> type.equals(AFKType.EXIT) && isAFK(p);
 
-	public void enterAFK(UUID uuid, String reason) {
+	private static final HashMap<Player, Optional<String>> afkReasons = new HashMap<>();
+
+	public void enterAFK(Player p, String reason) {
+
+		NameManager.setTabPrefix(p.getUniqueId(), "§6§l[AFK]");
+		announceAFK(new AFKInfo(p, AFKType.ENTER, reason));
 
 		Optional<String> r = reason.isEmpty() ? Optional.empty() : Optional.of(reason);
-		afkReasons.put(uuid, r);
-
-		Player player = Bukkit.getPlayer(uuid);
-		player.setPlayerListName(PlayerName.AFK_TAB.build(player.getName()).getName());
+		afkReasons.put(p, r);
 	}
 
-	public Optional<String> getReason(UUID uuid) {
-		return afkReasons.getOrDefault(uuid, Optional.empty());
+	public void exitAFK(Player p) {
+
+		NameManager.setTabPrefix(p.getUniqueId(), "");
+		announceAFK(new AFKInfo(p, AFKType.EXIT));
+
+		afkReasons.remove(p);
 	}
 
-	public void exitAFK(UUID uuid) {
+	private void announceAFK(AFKInfo info) {
 
-		Player player = Bukkit.getPlayer(uuid);
-		String name = getColoredName(player.getName());
-		player.setPlayerListName(name);
+		if (!ENTER_PREDICATE.or(EXIT_PREDICATE).test(info.p, info.type))
+			return;
 
-		afkReasons.remove(uuid);
+		String message = String.format("%s%s%s",
+				info.type.message,
+				NameManager.getColoredName(info.p.getName()),
+				(!info.reason.isEmpty() && info.type == AFKType.ENTER ? "§6: " + info.reason : ""));
+
+		Bukkit.getConsoleSender().sendMessage(message);
+		Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(message));
 	}
 
-	public boolean isAFK(UUID uuid) {
-		return afkReasons.containsKey(uuid);
+	public Optional<String> getReason(Player p) {
+		return afkReasons.getOrDefault(p, Optional.empty());
+	}
+
+	public boolean isAFK(Player p) {
+		return afkReasons.containsKey(p);
+	}
+
+	private static class AFKInfo {
+
+		private final Player p;
+		private final AFKType type;
+		private final String reason;
+
+		private AFKInfo(Player p, AFKType type) {
+			this(p, type, "");
+		}
+
+		private AFKInfo(Player p, AFKType type, String reason) {
+			this.p = p;
+			this.type = type;
+			this.reason = reason;
+		}
+	}
+
+	enum AFKType {
+
+		ENTER("§6§l[§a§l+§6§l]§f"),
+		EXIT("§6§l[§c§l-§6§l]§f");
+
+		private String message;
+
+		AFKType(String message) {
+			this.message = message;
+		}
 	}
 }

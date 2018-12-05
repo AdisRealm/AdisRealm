@@ -4,6 +4,7 @@ main: adiitya.adisrealm.AdisRealm
 load: STARTUP
 depend: [SmartInvs]
 api-version: 1.13
+prefix: AdisRealm
 commands:
   nick:
     description: Used to manage nicknames
