@@ -9,6 +9,14 @@ import java.util.UUID;
 @UtilityClass
 public class Utils {
 
+	/**
+	 * Gets the UUID of a player. This method is special
+	 * as it accepts nicknames as well as usernames.
+	 *
+	 * @param name The name or nickname
+	 *
+	 * @return The UUID
+	 */
 	public Optional<UUID> getUUID(String name) {
 
 		Optional<UUID> nickUUID = DataManager.getUUIDFromNickname(name);
