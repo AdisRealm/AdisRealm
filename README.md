@@ -1,7 +1,18 @@
 # Adi's Realm plugin
-This is a Bukkit plugin designed specifically for 
-the private Minecraft SMP I run. The features are 
-tailored for the needs of the SMP and it's members.
+This is a Bukkit plugin designed for the Adi's Realm private SMP.
+This is not intended for external use and it is not guarateed to work.
+
+## Features
+* Nicknames
+* AFK management
+* Name colors
+* Messaging
+
+## Commands
+* `/nick <add | remove | list>`
+* `/afk [reason]`
+* `/settings`
+* `/msg <player> <message>` & `/r <message>`
 
 ## Building from source
 This plugin uses maven to automate the building process.
