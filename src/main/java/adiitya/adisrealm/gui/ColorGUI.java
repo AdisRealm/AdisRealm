@@ -68,14 +68,16 @@ public final class ColorGUI {
 
 			NameManager.setColor(p.getName(), color.color);
 
-			for (int i = 0; i < 45; i++) {
+			for (int i = 0; i < 36; i++) {
 
-				if (inv.getItem(i) == null)
+				ItemStack item = inv.getItem(i);
+
+				if (item == null)
 					continue;
 
-				Material mat = inv.getItem(i).getType();
+				Material mat = item.getType();
 				NameColor c = NameColor.fromMaterial(mat);
-				ItemBuilder b = new ItemBuilder(inv.getItem(i)).clearEnchants();
+				ItemBuilder b = new ItemBuilder(item).clearEnchants();
 
 				if (NameManager.isColor(p.getName(), c.color))
 					b.addEnchant(Enchantment.DURABILITY, 1);
@@ -100,7 +102,9 @@ public final class ColorGUI {
 		}
 
 		@Override
-		public void update(Player player, InventoryContents contents) {}
+		public void update(Player player, InventoryContents contents) {
+			// unused
+		}
 	}
 
 	public enum NameColor {
