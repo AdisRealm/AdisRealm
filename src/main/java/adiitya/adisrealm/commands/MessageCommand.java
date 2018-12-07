@@ -1,5 +1,6 @@
 package adiitya.adisrealm.commands;
 
+import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletions;
@@ -17,7 +18,7 @@ import static adiitya.adisrealm.utils.NameManager.*;
 public final class MessageCommand extends SingleCommand {
 
 	public MessageCommand() {
-		super("msg", "<player> <msg>");
+		super(AdisRealm.getInstance(), "msg", "<player> <msg>");
 	}
 
 	@Override

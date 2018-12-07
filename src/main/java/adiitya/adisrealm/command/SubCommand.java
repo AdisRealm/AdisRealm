@@ -12,7 +12,7 @@ public abstract class SubCommand extends Command {
 
 	public SubCommand(String name, String usage, Predicate<Integer> argumentCount, Command parent) {
 
-		super(name, usage, argumentCount);
+		super(parent.plugin, name, usage, argumentCount);
 
 		this.parent = parent;
 	}

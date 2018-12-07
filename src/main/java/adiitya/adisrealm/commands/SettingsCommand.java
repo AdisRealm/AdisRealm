@@ -1,5 +1,6 @@
 package adiitya.adisrealm.commands;
 
+import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.gui.SettingsGUI;
@@ -11,7 +12,7 @@ import java.util.List;
 public final class SettingsCommand extends SingleCommand {
 
 	public SettingsCommand() {
-		super("settings", "");
+		super(AdisRealm.getInstance(), "settings", "");
 	}
 
 	@Override

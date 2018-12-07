@@ -1,5 +1,6 @@
 package adiitya.adisrealm.commands;
 
+import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public final class ReplyCommand extends SingleCommand {
 
 	public ReplyCommand() {
-		super("r", "<message>");
+		super(AdisRealm.getInstance(), "r", "<message>");
 	}
 
 	@Override

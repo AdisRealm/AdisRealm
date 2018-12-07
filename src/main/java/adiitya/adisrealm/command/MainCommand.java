@@ -1,6 +1,8 @@
 package adiitya.adisrealm.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
@@ -8,14 +10,14 @@ public abstract class MainCommand extends Command {
 
 	private final int requiredArgs;
 
-	public MainCommand(String name, String usage, int requiredArgs) {
-		super(name, usage, i -> false);
+	public MainCommand(JavaPlugin plugin, String name, String usage, int requiredArgs) {
+		super(plugin, name, usage, i -> false);
 		this.requiredArgs = requiredArgs;
 		initChildren();
 	}
 
-	public MainCommand(String name, String usage, int requiredArgs, List<Command> children) {
-		super(name, usage, i -> false, children);
+	public MainCommand(JavaPlugin plugin, String name, String usage, int requiredArgs, List<Command> children) {
+		super(plugin, name, usage, i -> false, children);
 		this.requiredArgs = requiredArgs;
 	}
 
@@ -23,7 +25,9 @@ public abstract class MainCommand extends Command {
 
 	@Override
 	public final boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-		execute(sender, Arrays.asList(args));
+
+		Bukkit.getScheduler().runTask(plugin, () -> execute(sender, Arrays.asList(args)));
+
 		return true;
 	}
 

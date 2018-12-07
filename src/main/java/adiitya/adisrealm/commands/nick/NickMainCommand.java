@@ -1,5 +1,6 @@
 package adiitya.adisrealm.commands.nick;
 
+import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.command.MainCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.command.completion.TabCompletion;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class NickMainCommand extends MainCommand {
 
 	public NickMainCommand() {
-		super("nick", "", 0);
+		super(AdisRealm.getInstance(), "nick", "", 0);
 	}
 
 	@Override

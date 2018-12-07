@@ -1,5 +1,6 @@
 package adiitya.adisrealm.commands;
 
+import adiitya.adisrealm.AdisRealm;
 import adiitya.adisrealm.command.SingleCommand;
 import adiitya.adisrealm.command.completion.TabCompleter;
 import adiitya.adisrealm.utils.AFKManager;
@@ -11,7 +12,7 @@ import java.util.List;
 public final class AFKCommand extends SingleCommand {
 
 	public AFKCommand() {
-		super("afk", "[reason]");
+		super(AdisRealm.getInstance(), "afk", "[reason]");
 	}
 
 	@Override
