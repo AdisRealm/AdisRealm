@@ -21,10 +21,12 @@ public final class BukkitHandler implements Listener {
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
-
+		
 		Player p = e.getPlayer();
 		String prefix = NameManager.getColor(p.getName()).toString();
 		e.setFormat(prefix + "%s§r: %s");
+		
+		Bukkit.getConsoleSender().sendMessage(String.format("<%s> %s", p.getName(), e.getMessage()));
 	}
 
 	@EventHandler
