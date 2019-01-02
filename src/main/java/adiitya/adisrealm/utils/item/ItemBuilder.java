@@ -1,4 +1,4 @@
-package adiitya.adisrealm.utils;
+package adiitya.adisrealm.utils.item;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

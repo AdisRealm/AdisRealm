@@ -1,4 +1,4 @@
-package adiitya.adisrealm.utils;
+package adiitya.adisrealm.utils.item;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.ItemStack;

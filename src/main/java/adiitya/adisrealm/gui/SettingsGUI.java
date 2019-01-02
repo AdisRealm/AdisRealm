@@ -1,6 +1,6 @@
 package adiitya.adisrealm.gui;
 
-import adiitya.adisrealm.utils.ItemBuilder;
+import adiitya.adisrealm.utils.item.ItemBuilder;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
